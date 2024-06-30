@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="../memberinfo.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='memberinfo.css') }}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    
+    <section class="container">
+        <div class="login-container">
+            <div class="form-container">
+                <h1 class="opacity">แก้ไขข้อมูลสมาชิก</h1>
+                <form>
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="id" value="{{data[0]}}">
+                    </div>
+                    อีเมล
+                    <input type="text" placeholder="อีเมล" value="{{data[1]}}" disabled/>
+                    ชื่อนามสกุล
+                    <input type="text" placeholder="ชื่อนามสกุล" value="{{data[3]}}" disabled/>
+                    เพศ
+                    <input type="text" placeholder="เพศ" value="{{data[4]}}" disabled/>
+                    วันเดือนปีเกิด
+                    <input type="date" placeholder="วันเดือนปีเกิด" value="{{data[5]}}" disabled/>
+                    ที่อยู่
+                    <input type="text" placeholder="ที่อยู่" value="{{data[6]}}" disabled/>
+                    เบอร์โทร
+                    <input type="text" placeholder="เบอร์โทร" value="{{data[7]}}" disabled/>
+                    <a href="/edit/{{data[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{data[0]}}">Edit</a>
+                    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
+                </form>
+                
+                <div id="modaledit{{data[0]}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                        </div>
+                        <div class="modal-body">
+                          
+                <form action = "/updateuser" method="POST" >
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="user_id" value="{{data[0]}}">
+                  </div>
+                    อีเมล
+                    <input type="text" name = 'email' value="{{data[1]}}"/>
+                    รหัสผ่าน
+                    <input type="text" name = 'password' value="{{data[2]}}"/>
+                    ชื่อนามสกุล
+                    <input type="text" name = 'name' value="{{data[3]}}"/>
+                    เพศ
+                    <input type="text" name = 'gender' value="{{data[4]}}"/>
+                    วันเดือนปีเกิด
+                    <input type="date" name = 'birthday' value="{{data[5]}}"/>
+                    ที่อยู่
+                    <input type="text" name = 'address' value="{{data[6]}}"/>
+                    เบอร์โทร
+                    <input type="text" name = 'tel_no' value="{{data[7]}}"/>
+                    <a href="/edit" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit">Edit</a>
+                    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">อัพเดท</button>
+                      </div>
+                </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="theme-btn-container"></div>
+        
+    </section>
+</body>
+</html>

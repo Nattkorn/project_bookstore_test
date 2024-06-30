@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>cart</h1>
+    <a href="/" class="btn btn-primary btn-xs">Main Page</a>
+    <div style="margin: 10px; max-width: 90%;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th >รูปภาพ</th>
+              <th>ชื่อ</th>
+              <th>สำนักพิมพ์</th>
+              <th>ประเภท</th>
+              <th>หมวดหมู่</th>
+              <th>ผู้่เเต่ง</th>
+              <th>คำอธิบาย</th>
+              <th>จำนวน</th>
+              <th>ราคา</th>
+              <th>จำนวนที่ซื้อ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(len-1) %}
+            <tr>
+              <td><img src = "{{data[i][8]}}" style="height: 100px;"></td>
+              <td>{{data[i][1]}}</td>
+              <td>{{data[i][2]}}</td>
+              <td>{{data[i][3]}}</td>
+              <td>{{data[i][4]}}</td>
+              <td>{{data[i][5]}}</td>
+              <td>{{data[i][6]}}</td>
+              <td>{{data[i][7]}}</td>
+              <td>{{data[i][11]}}</td>
+              <td>{{data[i][10]}}</td>
+              <td>
+                <a href="/deletecart/{{ data[i][0] }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+              </td>
+            </tr>
+          </div>
+        </div>
+   {% endfor %}
+   <p>ราาคารวม {{data[len-1]}}</p>
+   <a href="/deletecartall" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete All</a>
+   <a href="/confirm_list">Confirm</a>
+</body>
+</html>

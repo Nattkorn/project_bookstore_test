@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลัก</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='supdes.css') }}">
+    <style>
+        /* CSS styles for tab menu */
+        .tab-menu {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #333;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab-item:hover {
+            background-color: #ccc;
+        }
+
+        /* CSS styles for form container */
+        .form-container {
+            margin: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #270a0a;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
+    <header>
+        <!-- Tab menu -->
+        <nav class="tab-menu">
+            <div class="tab-item"><a href="/">หน้าแรก</a></div>
+            <div class="tab-item"><a href="./history.html">ประวัติการสั่งซื้อ</a></div>
+            
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin: 10px; max-width: 90%;">
+        {% for order in data %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th >รหัสการซื้อ</th>
+                    <th >รูปภาพ</th>
+                    <th>ชื่อ</th>
+                    <th>จำนวน</th>
+                    <th>ราคา</th>
+                    <th>สถานะ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <div>
+                    {% for book in order[0] %}
+                    <tr>
+                        <td>{{book[0]}}</td>
+                        <td><img src = "{{book[2]}}" style="height: 100px;"></td>
+                        <td>{{book[1]}}</td>
+                        <td>{{book[3]}}</td>
+                        <td>{{book[4]}}</td>
+                        <td>{{book[5]}}</td>
+                    </tr>
+                    {% endfor %}
+                </div>
+            </tbody>
+        </table>
+        <p>ราคารวม {{order[1][0][0]}}</p>
+        {% if order[0][0][5] == 0 %}
+        <a href="purchase/{{order[0][0][0]}}">ชำระเงิน</a>
+        {%else%}
+        <a href="/update_purchase" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{order[0][0][0]}}">เเก้ไขข้อมูลการชำระเงิน</a>
+        <div id="modaledit{{order[0][0][0]}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="/update_purchase" method="POST">
+                    <div class="form-group">
+                        <label>Payment Proof</label>
+                        <img src="/image/{{ order[0][0][0] }}" alt="Payment Proof" class="img-responsive" />
+                    </div>
+                    <div class="form-group">
+                      <label>Purchase ID</label>
+                      <input type="text" class="form-control" name="store" value="{{order[2][0]}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Name</label>
+                      <input type="text" class="form-control" name="store" value="{{order[2][1]}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Address</label>
+                      <input type="text" class="form-control" name="store" value="{{order[2][2]}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Tel_no</label>
+                      <input type="text" class="form-control" name="store" value="{{order[2][3]}}">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <a href="purchase/{{order[0][0][0]}}">เเก้ไขข้อมูลการชำระเงิน</a>
+                </div>
+             </div>
+        </div>
+    </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านขายหนังสือออนไลน์</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.15.1/dist/powerbi.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body >
+    <header>
+        <h1>Book</h1>
+        <nav>
+            <ul>
+                <li><a href="/" disabled>หน้าแรก</a></li>
+                <li><a href="#decision-support-system">ระบบสนับสนุนการตัดสินใจ</a></li>
+                <li><a href="#status">สถานะ</a></li>
+                <li id = "login"><a href="#login-signup">เข้าสู่ระบบ / สมัครสมาชิก</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- เนื้อหาหน้าแรก -->
+    <section id="home" >
+        <form id = "searchform"style="color: black;">
+          <h2 style="margin-right:20px">ค้นหาหนังสือ</h2>
+          <input type="text" id="search-input">
+          <div id="filter-container">
+          <select id="filter" name = f>
+            <option value="ทั้งหมด">ทั้งหมด</option>
+            <option value="บ้านและสวน">บ้านและสวน</option>
+            <option value="non-fiction">งานวิจัย</option>
+            <option value="biography">บรรยาย</option>
+            <option value="all">ทั้งหมด</option>
+            <option value="fiction">นิยาย</option>
+            <option value="non-fiction">งานวิจัย</option>
+            <option value="biography">บรรยาย</option>
+            </select>
+          </div>
+          <button id="search-button" type="submit">ค้นหา</button>
+        </form>
+      รูปหนังสือ----------------
+      <br><br>
+      <div id = "most_buy" >
+        หนังสือขายดี
+        <tbody>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th >รูปภาพ</th>
+                <th>ชื่อ</th>
+                <th>ราคา</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for index in range(1, 11) %}
+              <div> <!-- 1 box -->
+                <tr>
+                  <td><img src = "{{data[index][8]}}" style="height: 100px;"></td>
+                  <td>{{data[index][1]}}</td>
+                  <td>{{data[index][9]}}</td>
+                  <td>
+                    <a href="/addcart/{{data[index][0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{data[index][0]}}">Buy</a>
+                  </td>
+                </tr>
+            </div>
+              <div id="modaledit{{data[index][0]}}" class="modal fade" role="dialog" style="color: black;">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">อัพเดทข้อมูลหนังสือ</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="/addcart/{{data[index][0]}}" method="POST">
+                        <img src = "{{data[index][8]}}" style="height: 100px;">
+                        <div class="form-group">
+                          <label>Book Name</label>
+                          <p>{{data[index][1]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Publisher</label>
+                          <p>{{data[index][2]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Type</label>
+                          <p>{{data[index][3]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Category</label>
+                          <p>{{data[index][4]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Author</label>
+                          <p>{{data[index][5]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Description</label>
+                          <p>{{data[index][6]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Store</label>
+                          <p>{{data[index][7]}}
+                        </div>
+                        <div class="form-group">
+                          <label>Price</label>
+                          <p>{{data[index][9]}}
+                        </div>
+                        <div class="form-group">
+                          <input type="number" class="form-control" name="wanted" value="1"min="1" max="{{data[index][7]}}">
+                          {% if data[0][0] ==0 %}
+                            <button class="btn btn-primary" type="submit" disabled>Add to Cart</button>
+                          {% else %}
+                            <button class="btn btn-primary" type="submit" >Add to Cart</button>
+                          {% endif %}
+                        </div>
+                        <input style="display: none;" value = "mainpage" name = "url"></input>
+                      </form>
+                    </div>
+                 </div>
+            </div>
+       </div>
+       
+                {% endfor %}
+            </tbody>
+      </table>
+      </div>
+        <!-- เพิ่มเนื้อหาเพิ่มเติมที่นี่ -->
+    </section>
+
+    <!-- เพิ่มเนื้อหาของแต่ละส่วนต่อไป -->
+
+    <footer>
+    </footer>
+    <iframe title="book_store_data" width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiZTFjMjI1MDAtNGNiYS00NTJkLTkzMTEtMzY2OGE5ZTYzNjczIiwidCI6ImYyZDMyMDA1LTZhYjYtNDA4MS1iZjlhLTc2NWVmZjg4NjVhNCIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+
+    <script>
+      var url
+      document.getElementById('searchform').addEventListener("submit",function(event){
+          event.preventDefault(); // ป้องกันการโหลดหน้าใหม่เมื่อ submit form
+          if(document.getElementById('search-input').value == ""){
+            url = "/search/"+document.getElementById("filter").value+"/-"
+          }
+          else{
+            url = "/search/"+document.getElementById("filter").value+"/"+document.getElementById('search-input').value
+          }
+          window.location.href = url
+        })
+      console.log(document.getElementById("filter").value)
+      
+        flask_data = '{{data}}'
+        flask_data = flask_data.replaceAll("&#39;","").slice(1, -1)
+        pre_array = flask_data.split('(')
+        console.log(flask_data)
+        var i,data,x
+        array = []
+        array2 = []
+        for (i=1 ; i <pre_array.length ;i++){
+          data = pre_array[i].split(')')
+          array.push(data[0])
+        }
+        array = array[0].split(', ')
+        console.log(array[0])
+        if(array[0] == 0){
+          console.log('not login')
+          x = "<a href=\"/login\" class=\"btn btn-primary\">เข้าสู่ระบบ</a>"
+          document.getElementById("login").innerHTML = x
+        }
+        else if(array[0] == 1){
+          console.log('admin')
+          x = "<li><a href=\"./userinfo\">ข้อมูลรหัส</a></li><li><a href=\"/purchase_data\" class=\"btn btn-primary\">ข้อมูลการสั่งซื้อ</a></li><li><a href=\"/bookdata\" class=\"btn btn-primary\">ข้อมูลหนังสือ</a></li>\
+        <li><a href=\"/logout\" class=\"btn btn-primary\">ออกจากระบบ</a></li>"
+          document.getElementById("login").innerHTML = x
+        }
+        else{
+          console.log('custommer')
+          x = "<li><a href=\"/purchase_history\">ประวัติ</a></li><li><a href=\"./userinfo\">ข้อมูลรหัส</a></li><li><a href=\"/cart\" class=\"btn btn-primary\">Cart</a></li>\
+        <li><a href=\"/logout\" class=\"btn btn-primary\">ออกจากระบบ</a></li>"
+          document.getElementById("login").innerHTML = x
+        }
+    </script>
+</body>
+</html>

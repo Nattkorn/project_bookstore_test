@@ -1,0 +1,105 @@
+:root {
+    --background: #1a1a2e;
+    --color: #ffffff;
+    --primary-color: #0f3460;
+    --sub-bg: var(--background);
+}
+
+*{
+  box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background: var(--background);
+    color: var(--color);
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    position: relative;
+    width: 22.2rem;
+}
+
+.form-container {
+    border: 1px solid hsla(0, 7%, 92%, 0.158);
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.login-container form input,
+.login-container form select {
+    display: block;
+    padding: 14.5px;
+    width: 100%;
+    margin: 2rem 0;
+    color: rgb(119, 119, 122);
+    outline: none;
+    background-color: #9191911f;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    font-size: 15px;
+}
+
+.login-container form button {
+    background-color: var(--primary-color);
+    color: white;
+    display: block;
+    padding: 13px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 18px;
+    letter-spacing: 2.5px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    border: none;
+}
+
+.opacity {
+    opacity: 0.8;
+}
+
+/* CSS styles for back button /
+.back-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}
+
+a {
+    color: inherit; / ใช้สีของข้อความเหมือนกับข้อความปกติ /
+    transition: color 0.3s; / เพื่อให้มีการเปลี่ยนสีเมื่อเมาส์ไปวาง /
+    text-align: center;
+    margin-left: 35%;
+}
+
+a:hover {
+    color: #007bff; / สีเมื่อนำเมาส์ไปวาง */

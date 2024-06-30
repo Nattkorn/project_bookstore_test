@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Hello world</title>
+</head>
+<body >
+    <h1>Database test</h1>
+    <div style="margin: 10px; max-width: 90%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th >รูปภาพ</th>
+            <th>รหัส</th>
+            <th>ชื่อ</th>
+            <th>สำนักพิมพ์</th>
+            <th>ประเภท</th>
+            <th>หมวดหมู่</th>
+            <th>ผู้่เเต่ง</th>
+            <th>คำอธิบาย</th>
+            <th>จำนวน</th>
+            <th>ราคา</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in data %}
+          <tr>
+            <td><img src = "{{row.8}}" style="height: 100px;"></td>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>{{row.4}}</td>
+            <td>{{row.5}}</td>
+            <td>{{row.6}}</td>
+            <td>{{row.7}}</td>
+            <td>{{row.9}}</td>
+            <td>
+              <a href="/edit/{{ row.0 }}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">Delete</a>
+            </td>
+          </tr>
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="/update" method="POST">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="book_id" value="{{row.0}}">
+                      <label>Book Name</label>
+                      <input type="text" class="form-control" name="book_name" value="{{row.1}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Publisher</label>
+                      <input type="text" class="form-control" name="publisher" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Type</label>
+                      <input type="text" class="form-control" name="book_type" value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Category</label>
+                      <input type="text" class="form-control" name="category" value="{{row.4}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Author</label>
+                      <input type="text" class="form-control" name="author" value="{{row.5}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Description</label>
+                      <input type="text" class="form-control" name="description" value="{{row.6}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Store</label>
+                      <input type="number" class="form-control" name="store" value="{{row.7}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Image_url</label>
+                      <input type="text" class="form-control" name="image_url" value="{{row.8}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Price</label>
+                      <input type="number" class="form-control" name="price" value="{{row.9}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="submit">อัพเดท</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+             </div>
+        </div>
+   </div>
+            {% endfor %}
+        </tbody>
+  </table>
+    </div>
+    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
+  <a href="/add" class="btn btn-primary">เพิ่มรายชื่อใหม่</a>
+</body>
+</html>
