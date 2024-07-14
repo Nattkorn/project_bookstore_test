@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <h2>บันทึกข้อมูล</h2>
+          <form action="{{ url_for('insert') }}" method="post">
+           <div class="form-group">
+             <label for="fname">email</label>
+             <input type="text" class="form-control"  name="email">
+           </div>
+           <div class="form-group">
+             <label for="fname">password</label>
+             <input type="text" class="form-control"  name="password">
+           </div>
+           <a class="btn btn-success" href="/">กลับหน้าแรก</a>
+           <button type="submit" class="pull-right btn btn-primary">บันทึก</button>
+          </form>
+   </div>
+   <script>
+    flask_data = '{{data}}'
+    flask_data = flask_data.replaceAll("&#39;","").slice(1, -1)
+    pre_array = flask_data.split('(')
+    var i,data,x
+    array = []
+    array2 = []
+    for (i=1 ; i <pre_array.length ;i++){
+      data = pre_array[i].split(')')
+      array.push(data[0])
+    }
+    array = array[0].split(', ')
+    console.log(array[0])
+    if(array[0] == 0){
+      console.log('not login')
+      x = "<a href=\"/login\" class=\"btn btn-primary\">เข้าสู่ระบบ</a>"
+      document.getElementById("head").innerHTML = x
+    }
+    else if(array[0] == 1){
+      console.log('admin')
+      x = "<a href=\"/cart\" class=\"btn btn-primary\">Cart</a>\
+    <a href=\"/logout\" class=\"btn btn-primary\">ออกจากระบบ</a>"
+      document.getElementById("head").innerHTML = x
+    }
+    else{
+      console.log('custommer')
+    }
+  </script>
+</body>
+</html>

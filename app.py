@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
 import pymysql
+import datetime
 
 app = Flask(__name__)
-conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4')
-data_user = (1,"email","password","name","gender","birth","address",0)
+data_user = (2,"email","password","name","gender","birth","address",0)
 cart = []
 number_of_book = []
 book_search = ""
@@ -13,22 +13,22 @@ order_number = 0
 ##mainpage
 @app.route("/")
 def mainpage():
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4')
+    conn = connect_mysql()
+    print(data_user)
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT id,book_name,publisher,book_type,book_category,author,description,store,image_url,price FROM pur_hist JOIN data_book ON pur_hist.book_id = data_book.id GROUP BY book_id ORDER BY COUNT(*) DESC")
-    return render_template('index.html',data = (data_user,)+cur.fetchall())
+        cur.execute("SELECT id,data_book.book_name,publisher,book_type,book_category,author,description,store,data_book.image_url,data_book.price FROM pur_hist JOIN data_book ON pur_hist.book_id = data_book.id GROUP BY book_id ORDER BY COUNT(*) DESC")
+    return render_template('index.html',data = (data_user,)+(cur.fetchall(),))
 
 ##storebook
 @app.route("/bookdata")
 def showData():
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4')
+    conn = connect_mysql()
     if (data_user[0] == 1):
         with conn:
             cur = conn.cursor()
-            cur.execute("SELECT * FROM data_book")
-            rows = cur.fetchall()
-        return render_template('bookdata.html',data=rows)
+            cur.execute("SELECT * FROM data_book ORDER BY id")
+        return render_template('bookdata.html',data= cur.fetchall())
     else:
         return redirect("/")
 
@@ -42,9 +42,12 @@ def add_user():
 @app.route("/delete/<string:id_data>", methods = ['GET'])
 def delete(id_data):
     if (data_user[0] == 1):
+        conn = connect_mysql()
         with conn:
             cur = conn.cursor()
             cur.execute("DELETE FROM data_book WHERE id=%s",(id_data))
+            conn.commit()
+            cur.execute("DELETE FROM pur_hist WHERE book_id=%s AND status = 0",(id_data))
             conn.commit()
         return redirect(url_for('showData'))
     else:
@@ -54,6 +57,7 @@ def delete(id_data):
 def insert():
     if (data_user[0] == 1):
         if request.method == "POST":
+            conn = connect_mysql()
             book_id = request.form['book_id']
             book_name = request.form['book_name']
             publisher = request.form['publisher']
@@ -76,6 +80,7 @@ def insert():
 def update():
     if (data_user[0] == 1):
         if request.method == "POST":
+            conn = connect_mysql()
             book_id = request.form['book_id']
             book_name = request.form['book_name']
             publisher = request.form['publisher']
@@ -97,9 +102,10 @@ def update():
 ##search
 @app.route("/search/<string:filter>/<string:searchinput>", methods = ['GET'])
 def searchbook( filter,searchinput,):
+    searchinput = searchinput.replace("+-=","/")
     print(searchinput)
     try:
-        conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+        conn = connect_mysql() 
         with conn:
             global book_search,book_filter
             book_filter = filter
@@ -139,7 +145,7 @@ def logout():
 @app.route("/getlogin", methods = ['POST'])
 def getlogin():
     try:
-        conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+        conn = connect_mysql() 
         if request.method == "POST":
             email = request.form['email']
             password = request.form['password']
@@ -163,6 +169,7 @@ def register():
 @app.route("/insert_user", methods = ['POST'])
 def insert_user():
     if request.method == "POST":
+        conn = connect_mysql()
         email = request.form['email']
         password = request.form['password']
         fullname = request.form['fullname']
@@ -182,7 +189,7 @@ def userdata():
 
 @app.route("/updateuser", methods = ['POST'])
 def updatauser():
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql() 
     if request.method == "POST":
         user_id = request.form['user_id']
         email = request.form['email']
@@ -193,10 +200,12 @@ def updatauser():
         address = request.form['address']
         tel_no = request.form['tel_no']
         with conn.cursor() as cursor:
-            sql = "UPDATE `users` SET `email`=%s,`password`=%s,`fname`=%s,`gender`=%s,`birth`=%s,`address`=%s,`tel_no`=%s WHERE `customer_id` = %s"
+            sql = "UPDATE users SET email=%s,password=%s,fname=%s,gender=%s,birth=%s,address=%s,tel_no=%s WHERE customer_id = %s"
             cursor.execute(sql,(email,password,name,gender,birthday,address,tel_no,user_id))
             conn.commit()
-        return userdata(user_id)
+            global data_user
+            data_user = [user_id,email,password,name,gender,birthday,address,tel_no]
+        return userdata()
 
 ##Add to cart
 @app.route("/addcart/<string:id_data>", methods = ['POST'])
@@ -218,7 +227,7 @@ def addcart(id_data):
 ##cart
 @app.route("/cart", methods = ['GET'])
 def showcart():
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql() 
     with conn:
         cur = conn.cursor()
         global cart
@@ -231,7 +240,6 @@ def showcart():
             rows += (data,)
             total_price += (rows[i][11])*int(number_of_book[i])
         rows += (total_price,)
-        print(rows)
     return render_template('cart.html',data=rows,len = len(rows))
 
 ##delete in cart
@@ -252,118 +260,149 @@ def deletecartall():
 @app.route("/confirm_list", methods = ["GET"])
 def confirm_list():
     global cart,number_of_book
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql() 
+    date =  datetime.datetime.now()
+    print(cart,number_of_book)
+    sql = "INSERT INTO pur_hist (book_id, cus_id, amount, status, pur_id, date, book_name, img_book_url, price) VALUES (%s,%s,%s,0,%s,%s,%s,%s,%s)"
     with conn:
         cur = conn.cursor()
-        rows = ()
+        cur.execute("SELECT pur_id FROM pur_hist ORDER BY pur_id DESC LIMIT 1")
+        pur_id = cur.fetchone()[0]+1
         for i in range(len(cart)):
-            print(i)
-            cur.execute("SELECT * FROM `data_book` WHERE id = %s",(cart[i]))
-            data = cur.fetchall()
-            data = data[0]+(number_of_book[i],data[0][9]*int(number_of_book[i]),)
-            rows += (data,)
-        for i in cart:
-            print(i)
-            conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
-            with conn:
-                sql = "SELECT pur_id FROM pur_hist ORDER BY pur_id DESC LIMIT 1"
-                cur = conn.cursor()
-                cur.execute(sql)
-                data = cur.fetchall()
-                purchase_id = data[0][0]+1
-                for i in range(len(cart)):
-                    cur.execute("INSERT INTO `pur_hist`(`book_id`, `cus_id`, `amount`, `status`, `pur_id`) VALUES (%s,%s,%s,0,%s)",(cart[i],data_user[0],number_of_book[i],purchase_id))
-                    conn.commit()
-        cart = []
+            cur.execute("SELECT id, book_name, image_url, price FROM data_book WHERE id = %s",cart[i])
+            data_book = cur.fetchone()
+            print(data_book[0])
+            cur.execute(sql,(data_book[0], data_user[0], number_of_book[i], pur_id,date, data_book[1], data_book[2], data_book[3]))
+            conn.commit()
+        url = "/purchase/"+str(pur_id)
         number_of_book = []
-    return purchase(purchase_id)
+        data_book = []
+    return redirect(url)
 
 ##purchase_history
-@app.route("/purchase_history", methods = ['GET'])
-def purchase_history():
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
-    with conn:
-        cur = conn.cursor()
-        cur.execute("SELECT pur_id FROM pur_hist WHERE cus_id = %s",data_user[0])
-        data = tuple(set(cur.fetchall()))
-        rows = ()
-        for i in range(len(data)):
-            cur.execute("SELECT pur_id,book_name,image_url,amount,amount*price,status FROM data_book JOIN pur_hist ON data_book.id = pur_hist.book_id WHERE pur_id = %s",data[i][0])
-            pur_data = cur.fetchall()
-            cur.execute("SELECT sum(amount*price) FROM data_book JOIN pur_hist ON data_book.id = pur_hist.book_id WHERE pur_id = %s",data[i][0])
-            pur_data = (pur_data,cur.fetchall())
-            if(pur_data[0][0][5] > 0):
-                cur.execute("SELECT * FROM con_pur WHERE pur_id = %s",data[i][0])
-                pur_data += cur.fetchall()
-            rows += (pur_data,)
-    return render_template('history.html',data = rows,len = len(rows))
-
 @app.route("/purchase/<string:pur_id>",methods = ['GET'])
 def purchase(pur_id):
-    global data_user,order_number
+    global order_number
     order_number = pur_id
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql() 
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT status FROM pur_hist WHERE pur_id = %s", pur_id)
-        status = cur.fetchone()[0]
+        cur.execute("SELECT status, cus_id FROM pur_hist WHERE pur_id = %s", pur_id)
+        status = cur.fetchall()[0]
         print(status)
-        if(status == 0):
-            cur.execute("SELECT SUM(amount*price) FROM pur_hist JOIN data_book ON data_book.id = pur_hist.book_id WHERE pur_id = %s",pur_id)
-            total_price = cur.fetchall()
-            data  = (data_user[0],data_user[3],data_user[6],data_user[7])
-            data_purchase = (data,total_price,pur_id,)
+        print(status[0])
+        if(status[1] == data_user[0]):
+            if(status[0] == 0):
+                cur.execute("SELECT SUM(amount*price) FROM pur_hist WHERE pur_id = %s",pur_id)
+                total_price = cur.fetchall()
+                data  = (data_user[0],data_user[3],data_user[6],data_user[7])
+                data_purchase = (data,total_price,pur_id,)
+            else:
+                cur.execute("SELECT SUM(amount*price) FROM pur_hist WHERE pur_id = %s",pur_id)
+                total_price = cur.fetchall()
+                cur.execute("SELECT pur_id, name, address, tel_no FROM con_pur WHERE pur_id =%s",pur_id)
+                data_con = cur.fetchone()
+                data_purchase = (data_con,total_price,pur_id,)
+            return render_template('confirm_purchase.html',data = data_purchase)
         else:
-            cur.execute("SELECT SUM(amount*price) FROM pur_hist JOIN data_book ON data_book.id = pur_hist.book_id WHERE pur_id = %s",pur_id)
-            total_price = cur.fetchall()
-            cur.execute("SELECT pur_id, name, address, tel_no FROM con_pur WHERE pur_id =%s",pur_id)
-            data_con = cur.fetchone()
-            data_purchase = (data_con,total_price,pur_id,)
-    return render_template('confirm_purchase.html',data = data_purchase)
+            return redirect('/')
 
 @app.route("/purchase", methods = ['POST'])
 def submit_purchase():
     global order_number
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql()
     with conn:
+        pur_id = request.form['pur_id']
         name = request.form['name']
         address = request.form['address']   
         tel_no = request.form['tel_no']
         image = request.files['image']
         image_data = image.read()
         cur = conn.cursor()
-        cur.execute("INSERT INTO `con_pur`( `img_confirm`, `pur_id`, `name`, `address`, `tel_no`) VALUES (%s,%s,%s,%s,%s)",(image_data,order_number,name,address,tel_no))
-        conn.commit()
+        cur.execute("SELECT status, book_id FROM pur_hist WHERE pur_id = %s", pur_id)
+        data = cur.fetchall()
+        if (data[0][0] == 0):
+            cur.execute("INSERT INTO `con_pur`( `img_confirm`, `pur_id`, `name`, `address`, `tel_no`) VALUES (%s,%s,%s,%s,%s)",(image_data,order_number,name,address,tel_no))
+            conn.commit()
+            for i in data:
+                cur.execute("UPDATE data_book SET store = store-(SELECT amount FROM pur_hist WHERE pur_id = %s AND book_id = %s) WHERE id = %s",(pur_id,i[1],i[1]))
+                conn.commit()
+        else:
+            cur.execute("UPDATE `con_pur` SET `pur_id`=%s ,`name`=%s ,`address`=%s ,`tel_no`=%s ,`img_confirm`=%s  WHERE pur_id = %s",(pur_id, name, address, tel_no, image_data, pur_id))
+            conn.commit()
         cur.execute("UPDATE pur_hist SET status = 1 WHERE pur_id = %s",order_number)
         conn.commit()
     return mainpage()
 
 @app.route('/purchase_data')
 def purchase_data():
-    if(data_user[0] == 1):
-        conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4') 
+    conn = connect_mysql()
+    if(data_user[0] > 0):
         with conn:
             cur = conn.cursor()
-            cur.execute("SELECT pur_id FROM pur_hist LIMIT 10") ## อยากลืมเอ่า limit ออก
-            pur_id = cur.fetchall()
-            print(pur_id)
-            pur_id = sorted(set(pur_id))
+            if(data_user[0] == 1):
+                cur.execute("SELECT pur_id FROM pur_hist WHERE status = 3 LIMIT 5")
+            elif(data_user[0] > 1):
+                cur.execute("SELECT pur_id FROM pur_hist WHERE cus_id = %s AND status = 3",data_user[0])
+            pur_id = (sorted(set(cur.fetchall())))
             rows = ()
             for i in pur_id:
-                cur.execute("SELECT * FROM pur_hist WHERE pur_id = %s",i[0])
+                if(data_user[0] ==1):
+                    cur.execute("SELECT book_id,cus_id,amount,pur_id,date,status FROM pur_hist WHERE pur_id = %s",i[0])
+                elif(data_user[0] > 1):
+                    cur.execute("SELECT pur_id,book_name,img_book_url,amount,amount*price,status FROM pur_hist WHERE pur_id = %s",i[0])
                 pur_data = cur.fetchall()
-                cur.execute("SELECT sum(amount*price) FROM data_book JOIN pur_hist ON data_book.id = pur_hist.book_id WHERE pur_id = %s",i[0])
+                cur.execute("SELECT sum(amount*price) FROM pur_hist WHERE pur_id = %s",i[0])
                 pur_data = (pur_data,cur.fetchone())
+                if(pur_data[0][0][5] > 0):
+                    cur.execute("SELECT * FROM con_pur WHERE pur_id = %s",i[0])
+                    pur_data += cur.fetchall()
                 rows += (pur_data,)
-            print(rows)
-        return render_template('purchase_data.html',data = rows)
+                print(rows)
+            if(data_user[0] ==1):
+                return render_template('purchase_data.html',data = rows)
+            elif(data_user[0] > 1):
+                return render_template('history.html',data = rows) 
+    else:
+        redirect("/")
+
+@app.route('/status')
+def status_data():
+    conn = connect_mysql() 
+    if(data_user[0] > 0):
+        with conn:
+            cur = conn.cursor()
+            if(data_user[0] == 1):
+                cur.execute("SELECT pur_id FROM pur_hist WHERE status != 3 ORDER BY status")
+            elif(data_user[0] > 1):
+                cur.execute("SELECT pur_id FROM pur_hist WHERE cus_id = %s AND status != 3",data_user[0])
+            pur_id = (set(cur.fetchall()))
+            rows = ()
+            for i in pur_id:
+                if(data_user[0] ==1):
+                    print("say hi admin")
+                    cur.execute("SELECT book_id,cus_id,amount,pur_id,date,status FROM pur_hist WHERE pur_id = %s",i[0])
+                elif(data_user[0] > 1):
+                    cur.execute("SELECT pur_id,book_name,img_book_url,amount,amount*price,status FROM pur_hist WHERE pur_id = %s",i[0])
+                pur_data = cur.fetchall()
+                cur.execute("SELECT sum(amount*price) FROM pur_hist WHERE pur_id = %s",i[0])
+                pur_data = (pur_data,cur.fetchone())
+                if(pur_data[0][0][5] > 0):
+                    cur.execute("SELECT * FROM con_pur WHERE pur_id = %s",i[0])
+                    pur_data += cur.fetchall()
+                    print(pur_data)
+                rows += (pur_data,)
+            if(data_user[0] ==1):
+                return render_template('purchase_data.html',data = rows)
+            elif(data_user[0] > 1):
+                return render_template('history.html',data = rows) 
     else:
         redirect("/")
 
 @app.route('/update_status/<string:pur_id>', methods = ['POST'])
 def update_status(pur_id):    
     status = request.form['status']
-    conn = pymysql.connect(host = "bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",user = "uzff2w0i4yqdrfuu",password = "zi6MwS3EpolD8OLyPWgX",database = "bdllpb9w9pwcaojl7o8j",charset='utf8mb4')
+    conn = connect_mysql()
     with conn:
         cur = conn.cursor()
         cur.execute("UPDATE `pur_hist` SET status = %s WHERE pur_id = %s",(status,pur_id))
@@ -371,22 +410,25 @@ def update_status(pur_id):
     return redirect('/purchase_data')
 
 ##operation can use any place 
+
+#connect mysql server
+def connect_mysql():
+    conn = pymysql.connect(host = "bjsyctdxqolwzj7ltece-mysql.services.clever-cloud.com",user = "ucfsoyvnet07lpex",password = "9J2e02XXqLThvKvnSb9w",database = "bjsyctdxqolwzj7ltece",charset='utf8mb4')
+    return conn
+
 ##open image in mysql
 @app.route("/image/<int:pur_id>")
 def image(pur_id):
-    conn = pymysql.connect(
-        host="bdllpb9w9pwcaojl7o8j-mysql.services.clever-cloud.com",
-        user="uzff2w0i4yqdrfuu",
-        password="zi6MwS3EpolD8OLyPWgX",
-        database="bdllpb9w9pwcaojl7o8j",
-        charset='utf8mb4'
-    )
+    conn = connect_mysql()
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT img_confirm FROM con_pur WHERE pur_id = %s", (pur_id,))
-        image_blob = cur.fetchone()[0]
-    
-    return Response(image_blob, mimetype='image/png')
+        cur.execute("SELECT cus_id FROM pur_hist WHERE pur_id = %s",pur_id)
+        cus_id = cur.fetchone()[0]
+        if((cus_id==data_user[0]) | (data_user[0] == 1)):
+            cur.execute("SELECT img_confirm FROM con_pur WHERE pur_id = %s", (pur_id,))
+            image_blob = cur.fetchone()[0]
+            return Response(image_blob, mimetype='image/png')
+        return redirect('/')
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@
     display: inline-block;
     padding: 10px 20px;
     background-color: #007bff;
-    color: #fff;
+    
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
@@ -16,8 +16,8 @@
 }
 
 :root {
-    --background: #1a1a2e;
-    --color: #ffffff;
+    background-color:rgba(255, 255, 255, 0.37);
+    --color: #000000;
     --primary-color: #0f3460;
     --sub-bg:var(--background)
 }
@@ -35,6 +35,7 @@ body {
     background: var(--background);
     color: var(--color);
     letter-spacing: 1px;
+    background-color:wheat;
 }
 
 h1 {
@@ -46,16 +47,17 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    
 }
 
 .login-container {
     position: relative;
-    width: 22.2rem;
+    width: 50%;
 }
 .form-container {
     border: 1px solid hsla(0, 7%, 92%, 0.158);
     border-radius: 10px;
-    padding: 2rem;
+    padding: 30px;
 }
 
 .login-container form input {
@@ -63,7 +65,7 @@ h1 {
     padding: 14.5px;
     width: 100%;
     margin: 2rem 0;
-    color: white;
+    color: rgb(99, 96, 96);
     outline: none;
     background-color: #9191911f;
     border: none;
@@ -102,9 +104,9 @@ h1 {
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s;
+            
         }
 
         .back-btn:hover {
             background-color: #0056b3;
         }
-

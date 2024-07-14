@@ -8,13 +8,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Hello world</title>
 </head>
+<style>
+  body{
+    background-color: antiquewhite;
+  }
+</style>
 <body >
-    <h1>Database test</h1>
-    <div style="margin: 10px; max-width: 90%;">
+    <h1 style="text-align: center;">คลังหนังสือ</h1>
+    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
+    <a href="/add" class="btn btn-primary">เพิ่มรายชื่อใหม่</a>
+    <div style="margin: 10px; max-width: 100%;">
       <table class="table table-bordered">
         <thead>
-          <tr>
-            <th >รูปภาพ</th>
+          <tr style="background-color: white;">
+            <th>รูปภาพ</th>
             <th>รหัส</th>
             <th>ชื่อ</th>
             <th>สำนักพิมพ์</th>
@@ -28,7 +35,7 @@
         </thead>
         <tbody>
           {% for row in data %}
-          <tr>
+          <tr style="background-color: rgb(255, 255, 255)">
             <td><img src = "{{row.8}}" style="height: 100px;"></td>
             <td>{{row.0}}</td>
             <td>{{row.1}}</td>
@@ -98,14 +105,13 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-             </div>
+            </div>
         </div>
-   </div>
+  </div>
             {% endfor %}
         </tbody>
   </table>
     </div>
-    <a href="/" class="back-btn">กลับไปยังหน้าหลัก</a>
-  <a href="/add" class="btn btn-primary">เพิ่มรายชื่อใหม่</a>
+    
 </body>
 </html>

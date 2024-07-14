@@ -77,19 +77,13 @@
                         <td>{{book[1]}}</td>
                         <td>{{book[3]}}</td>
                         <td>{{book[4]}}</td>
-                        {% if book[5] == 0 %}
-                        <td>ยังไม่ได้ชำระเงิน</td>
-                        {% elif book[5] == 3 %}
-                        <td>ทำรายการเสร็จสิ้น</td>
-                        {% else %}
-                        <td>รอการตรวจสอบ</td>
-                        {% endif %}
+                        <td>{{book[5]}}</td>
                     </tr>
                     {% endfor %}
                 </div>
             </tbody>
         </table>
-        <p>ราคารวม {{order[1][0]}} บาท</p>
+        <p>ราคารวม {{order[1][0][0]}}</p>
         {% if order[0][0][5] == 0 %}
         <a href="purchase/{{order[0][0][0]}}">ชำระเงิน</a>
         {%else%}
@@ -105,8 +99,7 @@
                   <form action="/update_purchase" method="POST">
                     <div class="form-group">
                         <label>Payment Proof</label>
-                        <p>/image/{{order[0][0][0]}}</p>
-                        <img src="/image/{{order[0][0][0]}}" alt="Payment Proof" class="img-responsive" />
+                        <img src="/image/{{ order[0][0][0] }}" alt="Payment Proof" class="img-responsive" />
                     </div>
                     <div class="form-group">
                       <label>Purchase ID</label>

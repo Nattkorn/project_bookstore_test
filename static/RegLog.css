@@ -1,22 +1,23 @@
 :root {
-    --background: #1a1a2e;
-    --color: #ffffff;
+    --background: antiquewhite;
+    --color: #000000;
     --primary-color: #0f3460;
     --sub-bg: var(--background);
 }
 
 *{
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
     scroll-behavior: smooth;
+    text-decoration: none;
 }
 
 body {
     margin: 0;
     box-sizing: border-box;
-    background: var(--background);
+    background-color: antiquewhite;
     color: var(--color);
     letter-spacing: 1px;
 }
@@ -38,9 +39,10 @@ h1 {
 }
 
 .form-container {
-    border: 1px solid hsla(0, 7%, 92%, 0.158);
+    border: 1px solid hsla(0, 0%, 0%, 0.158);
     border-radius: 10px;
-    padding: 2rem;
+    background-color: rgb(255, 255, 255);
+    padding: 50px;
 }
 
 .login-container form input,
@@ -49,8 +51,9 @@ h1 {
     padding: 14.5px;
     width: 100%;
     margin: 2rem 0;
-    color: rgb(119, 119, 122);
+    color: rgb(80, 80, 82);
     outline: none;
+    border: solid;
     background-color: #9191911f;
     border: none;
     border-radius: 5px;
@@ -75,9 +78,7 @@ h1 {
     border: none;
 }
 
-.opacity {
-    opacity: 0.8;
-}
+    
 
 /* CSS styles for back button /
 .back-btn {

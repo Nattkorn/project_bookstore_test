@@ -14,10 +14,11 @@
     ชื่อ
     <input type="text" name = "name" value="{{data[0][1]}}">
     เบอร์โทร
-    <input type="text" name = "tel_no" value="{{data[0][2]}}">
+    <input type="number" name = "tel_no" value="{{data[0][3]}}">
     ที่อยู่
-    <input type="text" name = "address" value="{{data[0][3]}}">
+    <input type="text" name = "address" value="{{data[0][2]}}">
     <input type="file" name="image" accept="image/*">
+    <input type="text" name="pur_id" value="{{data[2]}}" style="display: none;">
     <button type="submit">ยืนยันการชำระเงิน</button>
 </form>
 </body>
