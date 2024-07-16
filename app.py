@@ -413,7 +413,7 @@ def update_status(pur_id):
 
 #connect mysql server
 def connect_mysql():
-    conn = pymysql.connect(host = "bjsyctdxqolwzj7ltece-mysql.services.clever-cloud.com",user = "ucfsoyvnet07lpex",password = "9J2e02XXqLThvKvnSb9w",database = "bjsyctdxqolwzj7ltece",charset='utf8mb4')
+    conn = pymysql.connect(host = "bz4wmwysknkncbytijkz-mysql.services.clever-cloud.com",user = "uqktonelhlb44lsb",password = "BflVVXRFGugcEPV42Eas",database = "bz4wmwysknkncbytijkz",charset='utf8mb4')
     return conn
 
 ##open image in mysql
