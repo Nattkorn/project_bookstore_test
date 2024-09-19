@@ -1,8 +1,0 @@
-Flask
-pymysql
-gunicorn
-numpy
-pandas
-scikit-learn
-mlxtend
-openpyxl
