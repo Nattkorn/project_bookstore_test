@@ -38,7 +38,7 @@ h1 {
     align-items: center;  /* จัดกึ่งกลางแนวตั้ง */
     min-height: 100vh; /* ให้ container สูงอย่างน้อยเท่ากับ viewport */
     margin: 0px;
-    background-image: url("./Image/1.4.jpg");
+    background-image: url("./image/1.4.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
