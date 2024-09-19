@@ -1,0 +1,234 @@
+  /* alert*/
+table{
+  width: 100%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+  /* alert*/
+  /* cart*/
+.header{grid-area: header;}
+.main{grid-area: main;}
+.option{grid-area: option;}
+body{
+  background-color:rgba(66, 66, 66, 0.37);
+  margin: 0;
+}
+.header{
+  font-size: 80px; 
+  background-color: rgb(0, 0, 0);
+  color: white;
+  height: 150px;
+}
+.main{
+  background-color:rgb(255, 255, 255);
+  border: 3px solid black;
+  margin: 10px;
+}
+.main table{
+  margin: 10px;
+}
+table td,th{
+  border: 1px solid black;
+  padding: 10px;
+}
+.option{
+  margin: 10px;
+  width: 300px;
+  background-color: rgb(255, 255, 255);
+}
+#main{
+  background-color: white;
+}
+  /* cart*/
+    
+    /* history*/
+
+
+    .tab-menu {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        background-color: #333;
+    }
+
+    .tab-item {
+        padding: 10px 20px;
+        background-color: #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .tab-item:hover {
+        background-color: #ccc;
+    }
+
+    /* history */
+    .form-container {
+        margin: 20px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #270a0a;
+    }
+
+html{
+    background-color: aliceblue;
+}
+
+h1{
+    color: rgb(241, 241, 241);
+}
+
+.upper {
+    display: flex;
+    background-color: #dd9b0d;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+  }
+  .icn, #user_info {
+    display: flex;
+    align-items: center;
+    margin: 15px;
+  }
+  .upper img{
+    width:150px;
+  }
+  #cart img{
+    width: 80px;
+    height: 60px;
+  }
+  #cart img:hover{
+    background-color: white;
+    border: solid;
+    border-radius: 30%;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    position: sticky; /* ทำให้ header sticky */
+    top: 0; /* ยึดติดกับด้านบนสุดของ viewport */
+    z-index: 1; /* ให้ header อยู่บนสุด */
+    background-color: rgb(53, 46, 46); /* เพิ่มสีพื้นหลัง (ไม่บังคับ) */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* เพิ่มเงา (ไม่บังคับ) */
+  }
+  header form {
+    display: flex;
+    align-items: center;
+  }
+  .header-image img  {
+    height: 360px; /* Set fixed height */
+    width: 100%;   /* Make width fill the container */
+    object-fit: cover; /* Cover the container while maintaining aspect ratio */
+    border: solid;
+  }
+  /* END HEADER */
+  
+
+
+
+  body{
+    background-color: #ffdab9;
+  }
+  
+  .main_content{
+    width: 65%;
+    margin: 0 auto; /* Center horizontally */
+    border: 3px solid #000; /* Add a 1px solid black border */
+    padding: 20px; /* Optional: Add padding for content spacing */
+    background-color: white;
+    min-height: 100vh;
+  }
+  
+    /* END Main */
+  .footer-container{
+    background-color: black;
+    padding: 15px;
+    color: white;
+    margin-top: 0;
+  }
+  /* END Make footer */
+  #bookselect{
+    width: 90%;
+  }
+   
+  
+  @media (max-width: 768px) {
+    .main_content {
+      flex-direction: column; /* Stack elements vertically on smaller screens */
+      font-size: 11px;
+    }
+    .main_content {
+      width: 90%; /* Make the navigation menu full width on smaller screens */
+    }
+    .icon img{
+      width:60px;
+      
+    }
+    .main_content img{
+      width: auto;
+      height: 100%;
+    }
+    #most_buy_container{
+      display: grid; /* Enable grid layout */
+      grid-template-columns: 50% 50%; /* Responsive columns */
+      grid-gap: 0px; /* Adjust gap between grid items as needed * */
+    
+    }
+    
+    .menu ul {
+      
+      position: absolute;
+      top: 40%; /* Position dropdown below the button */
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      
+    }
+    
+    .menu ul.show { /* Style for when the menu is visible */
+      display: block;
+    }
+    
+    .menu:hover ul, /* Show dropdown on hover on mobile */
+    .menu:focus-within ul { /* Show dropdown on focus on mobile */
+      display: block;
+    }
+    
+    #book_des:hover { /* Apply zoom on hover of the container */
+      transform: scale(1.6); /* Zoom in by 20% */
+      cursor: pointer;
+    }
+    
+    #cart img{
+    width: 50px;
+    height: 40px;
+    position:absolute;
+    top: 15px;
+    right: 30px;
+    padding: 5px;
+    }
+    .login_user{
+    position: absolute;
+    top: 15px; /* Adjust distance from top as needed */
+    right: 10px; /* Adjust distance from right as needed */
+    }
+    .upper img{
+        width:50px;
+    }
+    #bookselect{
+      width: 90%;
+    }
+    }
+    
+
+    
