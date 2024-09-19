@@ -14,12 +14,12 @@
   <div class = "top">
     <div class = "upper">
       <div class = "icn">
-        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
-        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
-        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='Image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='Image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='Image/cc-removebg-preview.png') }}" alt="รูปภาพ">
       </div>
       <div id = "user_info">
-        <a href="/cart" id = 'cart'> <img src="{{ url_for('static',filename='image/Shopping-Cart-icon.png') }}"></a>
+        <a href="/cart" id = 'cart'> <img src="{{ url_for('static',filename='Image/Shopping-Cart-icon.png') }}"></a>
         <div class = "login_user">
           {%if data[0][0] != 0%}
           <div id = 'username' value = '{{data[0][3]}}'>{{data[0][3]}}</div>
