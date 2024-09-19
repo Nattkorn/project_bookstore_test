@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+    <title>ตระกร้าสินค้า</title>
+</head>
+
+<body>
+  <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <div id = "pagename">
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        </div>
+    </div>
+    <header>
+        <h1>ตะกร้าสินค้า</h1>
+    </header>
+    </div>
+    <div class = "main_content">
+      
+      <table>
+        <thead>
+          <tr>
+            <th>รูปภาพ</th>
+            <th>ชื่อ</th>
+            <th>สำนักพิมพ์</th>
+            <th>ประเภท</th>
+            <th>หมวดหมู่</th>
+            <th>จำนวน</th>
+            <th>ราคา</th>
+            <th>จำนวนที่ซื้อ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(len-1) %}
+          <tr>
+            <td><img src = "{{data[i][8]}}" style="height: 100px;"></td>
+            <td>{{data[i][1]}}</td>
+            <td>{{data[i][2]}}</td>
+            <td>{{data[i][3]}}</td>
+            <td>{{data[i][5]}}</td>
+            <td>{{data[i][7]}}</td>
+            <td>{{data[i][9]}}</td>
+            <td>{{data[i][11]}}</td>
+            <td>
+              <a href="/deletecart/{{ data[i][0] }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">ลบ</a>
+            </td>
+            
+          </tr>
+          
+        {% endfor %}
+        
+        </tbody>
+        
+      </table>
+      {%if len > 1 %}
+      <div class = "option">
+        ราคารวม {{data[len-1]}} บาท 
+          <a href="/deletecartall" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')">ลบทั้งหมด</a>
+          <a href="/confirm_list" class="btn btn-primary btn-xs"  >ยืนยัน</a>
+      </div>
+      {%endif%}
+    </div>
+
+
+
+    
+</body>
+
+
+</html>

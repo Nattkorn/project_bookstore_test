@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แจ้งเตือนคลังหนังสือ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+</head>
+<body>
+    <div class = "top">
+        <div class = "upper">
+            <div class = "icn">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            </div>
+            <div id = "pagename">
+                <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+            </div>
+        </div>
+        <header>
+            <h1>หนังสือคงเหลือ</h1>
+        </header>
+
+        </div>
+    <div class = "main_content">
+    <table>
+        <thead>
+            <tr>
+                <th>รหัส</th>
+                <th>ชื่อหนังสือ</th>
+                <th>จำนวนคงเหลือ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in data %}
+            <tr>
+                <td>{{book[0]}}</td>
+                {% if book[2] == 0 %}
+                <td style = "color: red;">
+                {% elif book[2] <= 10 %}
+                <td style = "color: blue;">
+                {% else %}
+                <td>
+                {% endif %}
+
+                    {{book[1]}}</td>
+                <td>{{book[2]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    </div><br>
+
+</body>
+</html>

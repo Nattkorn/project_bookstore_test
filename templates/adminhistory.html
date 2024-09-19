@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประวัติการสั่งซื้อทั้งหมด</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='purchase_data.css') }}">
+</head>
+    
+    <body>
+        <div class = "top">
+        <div class = "upper">
+            <div class = "icn">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            </div>
+            <div id = "pagename">
+                <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+            </div>
+        </div>
+        <header>
+            <h1>ประวัติการสั่งซื้อทั้งหมด</h1>
+        </header>
+        </div>
+        
+        <div class = "main_content">
+            <div style="margin: 10px; max-width: 90%;">
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>รหัสการสั่งซื้อ</th>
+                            <th>รหัสหนังสือ</th>
+                            <th>รหัสลูกค้า</th>
+                            <th>จำนวน(เล่ม)</th>
+                            <th>ราคา(บาท)</th>
+                            <th>สถานะ</th>
+                            <th>วันทำรายการ</th>
+                        </tr>
+                    </thead>
+                    <br><br>
+                    <tbody>
+                        <div>
+                            {% for order in data %}
+                            {% for book in order[0] %}
+                            <tr>
+                                <td>{{book[8]}}</td>
+                                <td>{{book[0]}}</td>
+                                <td>{{book[1]}}</td>
+                                <td>{{book[2]}}</td>
+                                <td>{{book[7]}}</td>
+                                {% if book[3] == 1 %}
+                                <td>รอการตรวจสอบ</td>
+                                {% elif book[3] == 3 %}
+                                <td>ทำรายการเสร็จสิ้น</td>
+                                {% else %}
+                                <td>รอการจัดส่ง</td>
+                                {% endif %}
+                                <td>{{book[4]}}</td>
+                                {% if order[0][0][3] > 0 %}
+                <td><a href="/edit" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{order[0][0][8]}}">ตรวจสอบการชำระเงิน</a></td>
+                <div id="modaledit{{order[0][0][8]}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/update_status/{{order[0][0][8]}}" method="POST">
+                                    <p>หลักฐานการชำระเงิน</p>
+                                    <img src="/image/{{order[0][0][8]}}" style="width: 60%;">
+                                    <p>ราคา {{order[1]}} บาท</p>
+                                    <p>ชื่อผู้ซื้อ {{order[2][1]}}</p>
+                                    <p>ที่อยู่ {{order[2][2]}}</p>
+                                    <p>เบอร์ติดต่อ {{order[2][3]}}</p>
+                                    <p>สถานะ</p>
+                                    <select name="status" class="form-control">
+                                        <option value="0" {% if order[0][0][3] == 0 %}selected{% endif %}>ยังไม่ได้ชำระเงิน</option>
+                                        <option value="1" {% if order[0][0][3] == 1 %}selected{% endif %}>รอการตรวจสอบ</option>
+                                        <option value="2" {% if order[0][0][3] == 2 %}selected{% endif %}>รอการจัดส่ง</option>
+                                        <option value="3" {% if order[0][0][3] == 3 %}selected{% endif %}>ทำรายการเสร็จสิ้น</option>
+                                    </select>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                            </tr>
+                            {%endfor%}
+                            {%endfor%}
+                        </div>
+                    </tbody>
+                </table>
+                
+        </main><hr>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {%if total_pages > 1%}
+                {% if page > 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('purchase_data', page=page-1) }}">ก่อนหน้า</a></li>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('purchase_data', page=p) }}">{{ p }}</a></li>
+                {% endfor %}
+                {% if page < total_pages %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('purchase_data', page=page+1) }}">ถัดไป</a></li>
+                {% endif %}
+                {%endif%}
+            </ul>
+        </nav>
+    </div><br>   
+    
+        
+    
+
+</body>
+</html>

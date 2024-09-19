@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+    <title>จัดการโปรโมชั่น</title>
+</head>
+
+<body>
+  <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <div id = "pagename">
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        </div>
+    </div>
+    <header>
+        <h1>จัดการโปรโมชัน</h1>
+    </header>
+    </div>
+
+    <div class = "main_content">
+        <a href="/promotion">จัดการโปรโมชัน</a>
+        <div style="display: flex;">
+            <div>
+            หนังสือที่มักถูกซื้อบ่อยในช่วงนี้
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อหนังสือ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in data[0] %}
+                        <tr>
+                            <td>{{book[1][0]}}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        
+            <div>
+                หนังสือที่มักถูกซื้อคุ่กันในช่วงนี้
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อหนังสือ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in data[1] %}
+                        <tr>
+                            <td>{%for books in book[1]%}
+                            {{books}}, 
+                            {%endfor%}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div>
+                เพิ่มโปรโมชัน
+                <select id = "bookselect">
+                    {% for book in data[0] %}
+                    <option value = "{{book[1][0]}}">{{book[1][0]}}</option>
+                    {% endfor %}
+                    {% for book in data[1] %}
+                        <option>{%for books in book[1]%}
+                        {{books}}, 
+                        {%endfor%}
+                        </option>
+                    {%endfor%}
+                </select>
+                
+                <select id = "formatselect">
+                    <option value="เล่มที่ขายดีตามหมวดหมู่">เล่มที่ขายดีตามหมวดหมู่</option>
+                    <option value="ทั้งหมดในเรื่องนี้">ทั้งหมดในเรื่องนี้</option>
+                    <option value="เฉพาะเล่มนี้">เฉพาะเล่มนี้</option>
+                </select><br><br>
+                <div style="display: grid; grid-template-columns: auto auto;">
+                    <div>
+                        <label>วันเริ่มต้นโปรโมชัน:</label>
+                        <input value="" name = "start" type="date" id = "date-input">
+                    </div>
+                    <div>
+                        <label>วันสิ้นสุดโปรโมชัน:</label>
+                        <input value="" name = "end" type="date" id = "date-input2">
+                    </div>
+                </div>
+                <input id =  "percent_sale" type = "number">
+                <button id ="addtotable">เพิ่มลงในตาราง</button><hr>
+                <label style="color: red;">ถ้าหากเป็นของเเถมให้ใส้ข้อมูลรายละเอียดการได้รับ เเต่ถ้าเป็นการลดราคา ใส่เพียงตัวเลข ระบบจะนำไปลดราคาเป็นเปอร์เซ็นให้ทันที</label>
+            <table id = "promotion_table">
+                <thead>
+                    <tr>
+                        <th>ชื่อหนังสือที่เลือก</th>
+                        <th>รูปเเบบการเลือกกลุ่ม</th>
+                        <th>จำนวนที่เปอร์เซ็นที่ลด</th>
+                        <th>วันเริ่มต้นโปรโมชั่น</th>
+                        <th>วันสิ้นสุดโปรโมชั่น</th> 
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <button id ="submit_promotion">ยืนยันการจัดโปรโมชัน</button>
+        </div><br>
+    </div>
+
+
+
+    <script>
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // เดือนนับจาก 0, จึงต้อง +1
+        const year = today.getFullYear();
+        const currentDate = `${year}-${month}-${day}`;
+        document.getElementById("date-input").value = currentDate;
+        document.getElementById("date-input2").value = currentDate;
+        document.getElementById('addtotable').addEventListener('click', function() {
+            var book_selected = document.getElementById('bookselect').value
+            var format = document.getElementById('formatselect').value
+            var sale = document.getElementById('percent_sale').value
+            var start = document.getElementById('date-input').value
+            var end = document.getElementById('date-input2').value
+            var table = document.getElementById('promotion_table').getElementsByTagName('tbody')[0]
+            
+            var isduplicate = false
+            for (var i = 0; i < table.rows.length; i++){
+                if (table.rows[i].cells[0].textContent === book_selected){
+                    isduplicate = true
+                    break
+                }
+            }
+            if (!isduplicate){
+                if( sale !== ""){
+                    var newRow = table.insertRow()
+                    var newCell_0 = newRow.insertCell(0)
+                    var newCell_1= newRow.insertCell(1)
+                    var newCell_2 = newRow.insertCell(2)
+                    var newCell_3 = newRow.insertCell(3)
+                    var newCell_4 = newRow.insertCell(4)
+                    var newCell_5 = newRow.insertCell(5)
+                    newCell_0.textContent = book_selected
+                    newCell_1.textContent = format
+                    newCell_2.textContent = sale
+                    newCell_3.textContent = start
+                    newCell_4.textContent = end
+                    var deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', function() {
+                        table.deleteRow(newRow.rowIndex - 1); // Adjust for the header row
+                        });
+                    newCell_5.appendChild(deleteButton);
+                }
+                else{
+                    alert('ใส่ข้อมูลเกี่ยวกับการลดด้วยครับ')
+                }
+            }
+            else{
+                alert('มีหนังสือเล่มนี้จากที่เลือกไว้เเล้ว')
+            }
+        })
+
+        document.getElementById("submit_promotion").addEventListener('click', function(){
+            var data = []
+            var table = document.getElementById('promotion_table').getElementsByTagName('tbody')[0];
+            console.log(table)
+            for (var i = 0; i < table.rows.length; i++) {
+                var row = table.rows[i];
+                var rowData = {
+                    book: row.cells[0].textContent,
+                    format: row.cells[1].textContent,
+                    sale: row.cells[2].textContent,
+                    start: row.cells[3].textContent,
+                    end: row.cells[4].textContent
+                };
+                data.push(rowData);
+            }
+
+            fetch('/submit_promotion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Data sent successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            while (table.rows.length > 0) {
+                table.deleteRow(0);
+            }
+        });
+    </script>
+</body>
+
+
+</html>

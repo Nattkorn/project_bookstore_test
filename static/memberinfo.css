@@ -1,0 +1,257 @@
+  /* CSS styles for back button */
+  .form-container {
+    margin: 20px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select,input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #270a0a;
+}
+
+html{
+background-color: aliceblue;
+}
+
+h1{
+color: rgb(241, 241, 241);
+}
+
+.upper {
+display: flex;
+background-color: #dd9b0d;
+justify-content: space-between;
+align-items: center;
+font-size: 25px;
+}
+.icn, #user_info {
+display: flex;
+align-items: center;
+margin: 15px;
+}
+.upper img{
+width:150px;
+}
+#cart img{
+width: 80px;
+height: 60px;
+}
+#cart img:hover{
+background-color: white;
+border: solid;
+border-radius: 30%;
+}
+header {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 15px;
+position: sticky; /* ทำให้ header sticky */
+top: 0; /* ยึดติดกับด้านบนสุดของ viewport */
+z-index: 1; /* ให้ header อยู่บนสุด */
+background-color: rgb(53, 46, 46); /* เพิ่มสีพื้นหลัง (ไม่บังคับ) */
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* เพิ่มเงา (ไม่บังคับ) */
+}
+header form {
+display: flex;
+align-items: center;
+}
+.header-image img  {
+    height: 360px; /* Set fixed height */
+    width: 100%;   /* Make width fill the container */
+    object-fit: cover; /* Cover the container while maintaining aspect ratio */
+    border: solid;
+  }
+/* END HEADER */
+
+
+
+
+body{
+background-color: #ffdab9;
+margin: 0;
+}
+
+.main_content{
+width: 70%;
+margin: 0 auto; /* Center horizontally */
+border: 3px solid #000; /* Add a 1px solid black border */
+padding: 20px; /* Optional: Add padding for content spacing */
+background-color: white;
+min-height: 100vh;
+display: flex;          /* Enable Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    flex-direction: column; 
+}
+
+/* END Main */
+.footer-container{
+    background-color: rgb(53, 46, 46); 
+padding: 15px;
+color: white;
+margin-top: 0;
+}
+
+
+
+
+.back-btn {
+    margin-top: 10px;
+    display: block; /* เปลี่ยนเป็น block */
+    width: 100%; /* กำหนดความกว้างเต็ม */
+    padding: 10px 100px;
+    background-color: #dd9b0d;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+    font-size: 20px;
+}
+
+.back-btn:hover {
+    background-color: #dd9b0d;
+    color: #fff;
+}
+
+:root {
+    background-color:rgba(255, 255, 255, 0.37);
+    --color: #000000;
+    --primary-color: #dd9b0d;
+    --sub-bg:var(--background)
+}
+
+* {
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background: var(--background);
+    color: var(--color);
+    letter-spacing: 1px;
+    background-color: #ffdab9;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.login-container {
+    position: relative;
+    width: 90%;
+    font-size: 15px;
+}
+.form-container {
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.login-container form input {
+    display: block;
+    padding: 14.5px;
+    width: 100%;
+    margin: 2rem 0;
+    color: rgb(99, 96, 96);
+    outline: none;
+    background-color: #9191911f;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    
+}
+
+.login-container form button {
+    background-color: var(--primary-color);
+    color: white;
+    display: block;
+    padding: 13px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 18px;
+    letter-spacing: 2.5px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+}
+
+.opacity {
+    opacity: 0.8;
+}
+
+  /* CSS styles for back button */
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dd9b0d;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            
+        }
+
+        .back-btn:hover {
+            background-color: #dd9b0d;
+        }
+
+.form-container{
+    background-color: white;
+}
+
+body{
+    font-size: 10px;
+    background-color: #ffdab9;
+}
+
+/* ... (your existing CSS) ... */
+
+/* Media Query for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+    .login-container {
+        width: 80%; /* Adjust as needed */
+        margin: 0 auto; /* Center horizontally */
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    .main_content{
+        width: 100%;
+    }
+    .icn img{
+        width:60px;
+        
+      }
+      #cart img{
+        width: 50px;
+        height: 40px;
+        position:absolute;
+        top: 15px;
+        right: 30px;
+        padding: 5px;
+        }
+}
+

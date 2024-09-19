@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+    <title>ตระกร้าสินค้า</title>
+</head>
+
+<body>
+  <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <div id = "pagename">
+        </div>
+    </div>
+    <header>
+        <h1>ตะกร้าสินค้า</h1>
+    </header>
+    <div class="header-image"><img src="{{ url_for('static', filename='image/1.jpg') }}" alt="รูปภาพ"></div>
+    </div>
+
+    <div class = "main_content">
+        <table>
+            <thead>
+                <tr>
+                    <th>lite</th>
+                    <th>book_name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in data[0] %}
+                <tr>
+                    <td>{{book[0]}}</td>
+                    <td>{{book[1]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="header-image"><img src = "../static/Image/kirill-fokin-aBEqxwU_Jq0-unsplash.jpg"> </div>
+
+
+    <footer>
+        <div class = "footer-container">
+        <div class = "footer">
+            <section id="home" >        
+                <h1>About Us </h1>
+                <nav class = "aboutus">
+                <ul>
+                    <li>เว็ปไซต์นี้เป็นส่วนหนึ่งของโปรเจคจบการศึกษาของ นายณัฐพล และ นายณฐกร ของมหาวิทยาลัยเทคโนโลยีราชมงคลกรุงเทพ คณะวิทยาศาสตร์
+                        สาขาวิทยาการคอมพิวเตอร์ ติดต่อ เบอร์ "089-8290-117" หรือ "089-8290-117"
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+
+
+</html>

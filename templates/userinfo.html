@@ -1,0 +1,112 @@
+  <!DOCTYPE html>
+  <html lang="en" >
+  <head>
+  <meta charset="UTF-8">
+  <title>ข้อมูลผู้ใช้</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='memberinfo.css') }}">
+  </head>
+  <body>
+    <div class = "top">
+      <div class = "upper">
+          <div class = "icn">
+          <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+          <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+          <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+          </div>
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        </div>
+      </div>
+      <header>
+          <h1>ข้อมูลรายละเอียดของผู้ใช้</h1>
+      </header>
+
+      <section class="main_content">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul style="background-color: rgb(255, 155, 155); padding: 20px; list-style-type: none;">
+            <li>การเเก้ไขข้อมูลของท่านไม่สำเร็จ</li>
+            {% for category, message in messages %}
+              <li class="{{ category }}" >{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+          <div class="login-container">
+              <div  class="form-container">
+                  <h1 style="text-align: center;color: #000;" class="opacity" >แก้ไขข้อมูลสมาชิก</h1>
+                
+                  <form >
+                      <div class="form-group">
+                      รหัสผู้ใช้
+                      <input style="background-color: #9191911f;" type="text" placeholder="USERID" class="form-control" name="id" value="{{data[0]}}" disabled>
+                      อีเมล
+                      <input type="text" placeholder="อีเมล" value="{{data[1]}}" disabled/>
+                      ชื่อนามสกุล
+                      <input type="text" placeholder="ชื่อนามสกุล" value="{{data[3]}}" disabled/>
+                      เพศ
+                      <input type="text" placeholder="เพศ" value="{{data[4]}}" disabled/>
+                      วันเดือนปีเกิด
+                      <input type="date" placeholder="วันเดือนปีเกิด" value="{{data[5]}}" disabled/>
+                      ที่อยู่
+                      <input type="text" placeholder="ที่อยู่" value="{{data[6]}}" disabled/>
+                      เบอร์โทร
+                      <input type="text" placeholder="เบอร์โทร" value="{{data[7]}}" disabled/>
+                      <a href="/edit/{{data[0]}}"id="editbtn" class="back-btn" data-toggle="modal" data-target="#modaledit{{data[0]}}">แก้ไข</a>
+                      <a href="./" class="back-btn">กลับไปยังหน้าหลัก</a>
+                    </div>
+                  </form>
+                  
+                  <div id="modaledit{{data[0]}}" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                          </div>
+                          <div class="modal-body">
+                            
+                  <form action = "/updateuser" method="POST" >
+                    <div class="form-group">
+                      USER ID
+                      <input type="text" class="form-control" name="user_id" value="{{data[0]}} " readonly>
+                      อีเมล
+                      <input type="text" name = 'email' value="{{data[1]}}"/>
+                      รหัสผ่าน
+                      <input type="text" name = 'password' value="{{data[2]}}"/>
+                      ชื่อนามสกุล
+                      <input type="text" name = 'name' value="{{data[3]}}"/>
+                      เพศ
+                      <select name="gender" id="gender">
+                        <option value="">เลือกเพศ</option>
+                        <option value="ชาย" {% if gender == "ชาย" %}selected{% endif %}>ชาย</option>
+                        <option value="หญิง" {% if gender == "หญิง" %}selected{% endif %}>หญิง</option>
+                        <option value="อื่นๆ" {% if gender == "อื่นๆ" %}selected{% endif %}>อื่นๆ</option>
+                      </select>
+                      วันเดือนปีเกิด
+                      <input type="date" name = 'birthday' value="{{data[5]}}"/>
+                      ที่อยู่
+                      <input type="text" name = 'address' value="{{data[6]}}"/>
+                      เบอร์โทร
+                      <input type="text" name = 'tel_no' value="{{data[7]}}"/>
+                      <div class="form-group">
+                          <button class="btn btn-primary" type="submit">อัพเดท</button>
+                      </div>
+                  </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="theme-btn-container"></div>
+          
+      </section>
+  </body>
+  </html>

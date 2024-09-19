@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าแรกแอดมิน</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.15.1/dist/powerbi.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='adminmain.css') }}">
+</head>
+<body>
+  <div class = "top">
+    <div class = "upper">
+      <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+      </div>
+      <div id = "user_info">
+        <div class = "login_user">
+          {%if data[0][0] != 0%}
+          <div id = 'username' value = '{{data[0][3]}}'>{{data[0][3]}}</div>
+          <a href="/logout">ออกจากระบบ</a>
+          {%else%}
+          <a href="/login">เข้าสู่ระบบ</a>
+          <a href="/register">สมัครสมาชิก</a>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+    <header>
+      <nav class = "menu">
+        <ul>
+            <li><a href="/" disabled>หน้าแรก</a></li>
+            <li><a href="/support_manager">จัดการโปรโมชัน</a></li>
+              <li><a href="/status_data">สถานะข้อมูลการสั่งซื้อ</a></li>
+              <li><a href="/userinfo">ข้อมูลผู้ใช้</a></li>
+              <li><a href="/purchase_data">ประวัติการสั่งซื้อทั้งหมด</a></li>
+              <li><a href="/showData" >ข้อมูลหนังสือ</a></li>
+              <li><a href="/alert">จำนวนคงเหลือ</a></li>
+      
+          </ul>
+        </nav>
+    </header>
+  </div>
+  
+
+  <div class = "main_content">
+    <div class = "top_box">
+        <iframe id="Powerbi" title="bookstore" width="600" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiNmQwNTA2M2YtZDE1NC00NjcwLThjNjctNzRlYmMyM2U2MWE5IiwidCI6ImYyZDMyMDA1LTZhYjYtNDA4MS1iZjlhLTc2NWVmZjg4NjVhNCIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+      </div>
+      <hr>
+      <div class="report">
+        <div style="font-size: 20px;">ดาวน์โหลดรายงานการสั่งซื้อ</div>
+        <a href="/download-excel" download>
+            <button>ดาวน์โหลด Excel</button>
+        </a><hr>
+        <form action = "/report" method="post">
+          <div>
+            <label>เริ่มต้น:</label>
+            <input value="" name = "start" type="date" id = "date-input">
+            <label>สิ้นสุด</label>
+            <input value="" name = "end" type="date" id = "date-input2">
+            <button type="submit">ยืนยัน</button>
+            <select id="filter" name = 'fillter'>
+              <option value="">หมวดหมู่</option>
+              <option id="life" value="ความรู้รอบตัว">ความรู้รอบตัว</option>
+              <option value="บริหาร / การเงิน / การตลาด">บริหาร / การเงิน / การตลาด</option>
+              <option value="ท่องเที่ยว">ท่องเที่ยว</option>
+              <option value="งานอดิเรก / งานฝีมือ">งานอดิเรก / งานฝีมือ</option>
+              <option value="สุขภาพ / อาหาร / ความงาม">สุขภาพ / อาหาร / ความงาม</option>
+              <option value="เทคโนโลยี / คอมพิวเตอร์">เทคโนโลยี / คอมพิวเตอร์</option>
+              <option value="หนังสือเด็ก">หนังสือเด็ก</option>
+              <option value="ศิลปะ / ดนตรี">ศิลปะ / ดนตรี</option>
+              <option value="พืช / การเกษตร">พืช / การเกษตร</option>
+              <option value="สารคดี / ประวัติศาสตร์ / ชีวประวัติ">สารคดี / ประวัติศาสตร์ / ชีวประวัติ</option>
+              <option value="ครอบครัว แม่และเด็ก">ครอบครัว แม่และเด็ก</option>
+              <option value="ปรัชญา / ศาสนา">ปรัชญา / ศาสนา</option>
+              <option value="โหราศาสตร์ / ความเชื่อ">โหราศาสตร์ / ความเชื่อ</option>
+              <option value="กฏหมาย / การเมือง">กฏหมาย / การเมือง</option>
+              <option value="จิตวิทยา / พัฒนาตนเอง">จิตวิทยา / พัฒนาตนเอง</option>
+              <option value="นิตยสาร">นิตยสาร</option>
+              <option value="หนังสือภาษาต่างประเทศ">หนังสือภาษาต่างประเทศ</option>
+              <option value="หนังสือการ์ตูน มังงะ">หนังสือการ์ตูน มังงะ</option>
+              <option value="หนังสือนิยาย / วรรณกรรม">หนังสือนิยาย / วรรณกรรม	</option>
+              <option value="วิชาการ / ความรู้ทั่วไป">วิชาการ / ความรู้ทั่วไป</option>
+              </select>
+          </div>
+        </form>
+        <hr>
+        <div id="table-list"> 
+        <div class="sell_list">
+        รายการหนังสือที่ถูกซื้อ
+        <table id = "report_book" style="width: 100%;">
+          <thead>
+            <tr>
+              <th>รหัสหนังสือ</th>
+              <th>ชื่อหนังสือ</th>
+              <th>จำนวนคงเหลือ</th>
+              <th>ยอดขาย(บาท)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for book in data[1]%}
+            <tr>
+              <td>{{book[0]}}</td>
+              <td>{{book[1]}}</td>
+              <td>{{book[4]}}</td>
+              <td>{{book[3]}}</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div><hr>
+
+        <div class="reporttype">รายงานยอดขายของหนังสือแต่ละประเภท<br><br>
+
+        <table id = "report_type">
+          <thead>
+            <tr>
+              <th>ประเภทหนังสือ</th>
+              <th>ยอดขาย(เล่ม)</th>
+              <th>จำนวนเงิน(บาท)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for type in data[2]%}
+            <tr>
+              <td>{{type[0]}}</td>
+              <td>{{type[1]}}</td>
+              <td>{{type[2]}}</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <br>
+  </div>
+ 
+  <footer>
+    <div class = "footer-container">
+      <footer>
+        <div class = "footer-container">
+          <div class = "footer">
+              <section id="home" >        
+                <h1>เกี่ยวกับเรา </h1>
+                <nav class = "aboutus">
+                  <ul>
+                      <li>เว็ปไซต์นี้เป็นส่วนหนึ่งของโปรเจคจบการศึกษาของ นายณัฐพล และ นายณฐกร ของมหาวิทยาลัยเทคโนโลยีราชมงคลกรุงเทพ คณะวิทยาศาสตร์
+                        สาขาวิทยาการคอมพิวเตอร์ ติดต่อ เบอร์ "089-829-0117" หรือ "092-260-2300"
+                      </li>
+                      <li>
+                        เว็ปไซต์มีการใช้ข้อมูลจาก https://www.b2s.co.th/ และ  https://www.naiin.com/
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </footer>
+    <script>
+      console.log(document.getElementById('username').innerHTML)
+      uesr_name = document.getElementById('username').innerHTML.split(" ")
+      document.getElementById('username').innerHTML = uesr_name[0]
+
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // เดือนนับจาก 0, จึงต้อง +1
+    const year = today.getFullYear();
+    const currentDate = `${year}-${month}-${day}`;
+    document.getElementById("date-input").value = currentDate;
+    document.getElementById("date-input2").value = currentDate;
+        
+    </script>
+  </body>
+</html>

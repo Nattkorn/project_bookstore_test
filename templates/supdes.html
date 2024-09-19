@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสนับสนุนการตัดสินใจซื้อหนังสือ</title>
+    <link rel="stylesheet" href="../static/supdes.css">
+</head>
+<body>
+    <div class = "top">
+        <div class = "upper">
+            <div class = "icn">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+            <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+            </div>
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        </div>
+        <header>
+            <h1>ระบบสนับสนุนการตัดสินใจซื้อหนังสือ</h1>
+        </header>
+        </div>
+
+    <main>
+        <div class="main_content">
+        <div class="form-container">
+            <h1>กรุณาใส่ข้อมูลของท่าน</h1>
+            <form id = "datauser" action="{{ url_for('predict') }}" method="post">
+                <p>เพศ</p>
+                <select name = 'gender'>
+                    <option value = '1'>ชาย</option>
+                    <option value = '2'>หญิง</option>
+                </select>
+                <p>อายุ</p>
+                <select name = 'age'>
+                    <option value = '1'>ต่ำกว่า 15 ปี</option>
+                    <option value = '1'>15-20 ปี</option>
+                    <option value = '2'>21-29 ปี</option>
+                    <option value = '3'>30-39 ปี</option>
+                    <option value = '4'>40-49 ปี</option>
+                    <option value = '1'>สูงกว่า 49 ปี</option>
+                </select>
+                <p>ระดับการศึกษา</p>
+                <select name = 'education'>
+                    <option value = '1'>มัธยมต้น</option>
+                    <option value = '2'>มัธยมปลาย หรือเทียบเท่า</option>
+                    <option value = '3'>ปวช.</option>
+                    <option value = '4'>ปวส.</option>
+                    <option value = '5'>ปริญญาตรี หรือเทียบเท่า</option>
+                    <option value = '6'>ปริญญาโท</option>
+                    <option value = '7'>ปริญญาเอก</option>
+                </select>
+                <p>อาชีพ</p>
+                <select name = 'job'>
+                    <option value = '1'>รับราชการ</option>
+                    <option value = '2'>พนักงานรัฐวิสาหกิจ</option>
+                    <option value = '3'>พนักงานบริษัทเอกชน</option>
+                    <option value = '4'>ธุรกิจส่วนตัว</option>
+                    <option value = '5'>รับจ้างทั่วไป</option>
+                    <option value = '6'>นักเรียน</option>
+                    <option value = '7'>นักศึกษา</option>
+                    <option value = '8'>ค้าขาย</option>
+                    <option value = '9'>อื่นๆ</option>
+                </select>
+                <p>รายได้ต่อเดือน</p>
+                <select name = 'income'>
+                    <option value = '1'>0 - 15,000 บาท</option>
+                    <option value = '2'>15,001 – 30,000 บาท</option>
+                    <option value = '3'>30,001 – 50,000 บาท</option>
+                    <option value = '4'>มากกว่า 50,000 บาท</option>
+                </select>
+
+                <p>ประเภทหนังสือที่ท่านมักซื้อเป็นอันดับที่ 1</p>
+                <select name = 'type_1'>
+                    <option value = '1'>นิยาย เเละวรรณกรรม</option>
+                    <option value = '2'>วิทยาการ เเละเทคโนโลยี</option>
+                    <option value = '3'>ประวัติศาสตร์ เเละวัฒนธรรม</option>
+                    <option value = '4'>การศึกษา เเละการเรียนรู้</option>
+                    <option value = '5'>ธุรกิจ เเละการเงิน</option>
+                    <option value = '6'>สุขภาพ เเละการดูเเลรักษา</option>
+                    <option value = '7'>ศาสนา เเละปรัชญา</option>
+                </select>
+                <p>ประเภทหนังสือที่ท่านมักซื้อเป็นอันดับที่ 2</p>
+                <select name = 'type_2'>
+                    <option value = '2'>วิทยาการ เเละเทคโนโลยี</option>
+                    <option value = '1'>นิยาย เเละวรรณกรรม</option>
+                    <option value = '3'>ประวัติศาสตร์ เเละวัฒนธรรม</option>
+                    <option value = '4'>การศึกษา เเละการเรียนรู้</option>
+                    <option value = '5'>ธุรกิจ เเละการเงิน</option>
+                    <option value = '6'>สุขภาพ เเละการดูเเลรักษา</option>
+                    <option value = '7'>ศาสนา เเละปรัชญา</option>
+                </select>
+                <p>ประเภทหนังสือที่ท่านซื้อมากที่สุดในช่วง 3 เดือน</p>
+                <select name = 'type_3ท'>
+                    <option value = '1'>นิยาย เเละวรรณกรรม</option>
+                    <option value = '2'>วิทยาการ เเละเทคโนโลยี</option>
+                    <option value = '3'>ประวัติศาสตร์ เเละวัฒนธรรม</option>
+                    <option value = '4'>การศึกษา เเละการเรียนรู้</option>
+                    <option value = '5'>ธุรกิจ เเละการเงิน</option>
+                    <option value = '6'>สุขภาพ เเละการดูเเลรักษา</option>
+                    <option value = '7'>ศาสนา เเละปรัชญา</option>
+                </select>
+                <p>มักนิยมซื้อหนังสือในหมวดหมู่ใดมากที่สุดในช่วง 3 เดือนที่ผ่านมา</p>
+                <select name = 'category_3m'>
+                    <option value = '1'>หนังสือเรียน</option>
+                    <option value = '2'>หนังสือการ์ตูน</option>
+                    <option value = '3'>นิยาย</option>
+                    <option value = '4'>วรรณกรรม</option>
+                    <option value = '5'>หนังสือท่องเที่ยว</option>
+                    <option value = '6'>ไลฟ์สไตล์</option>
+                    <option value = '7'>สุขภาพ เเละความงาม</option>
+                    <option value = '8'>คอมพิวเตอร์</option>
+                    <option value = '9'>โหราศาสตร์ ดูดวง ฮวงจุ้ย</option>
+                    <option value = '10'>หนังสือต่างประเทศ</option>
+                    <option value = '11'>หนังสือเตรียมสอบ เเนวข้อสอบ</option>
+                </select>
+                <p>ราคาของหนังสือโดยเฉลี่ยนที่ท่านซื้อ</p>
+                <select name = 'avg_cost'>
+                    <option value = '1'>ไม่เกิน 200 บาท</option>
+                    <option value = '2'>201 - 500 บาท</option>
+                    <option value = '3'>501 - 800 บาท</option>
+                    <option value = '4'>801 - 1,000 บาท</option>
+                    <option value = '5'>1,001 - 1,500 บาท</option>
+                    <option value = '6'>มากกว่า 1,500 บาท</option>
+                </select>
+                <button type="submit">ทำนาย</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

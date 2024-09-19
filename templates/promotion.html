@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+    <title>จัดการโปรโมชัน</title>
+</head>
+
+<body>
+  <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        
+    </div>
+    <header>
+        <h1>จัดการโปรโมชัน</h1>
+    </header>
+    </div>
+
+    <div class = "main_content">
+        <div>
+            <a href="/bookdata" >ข้อมูลหนังสือ</a><br>
+            โปรโมชันในปัจจุบัน
+            {% for promotion in data %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ชื่อหนังสือที่เลือก</th>
+                        <th>รูปเเบบการเลือกกลุ่ม</th>
+                        <th>วันเริ่มต้นโปรโมชัน</th>
+                        <th>วันสิ้นสุดโปรโมชัน</th>
+                        <th>จำนวนที่เปอร์เซ็นที่ลด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{promotion[0]}}</td>
+                        <td>{{promotion[1]}}</td>
+                        <td>{{promotion[2]}}</td>
+                        <td>{{promotion[3]}}</td>
+                        <td>{{promotion[4]}}</td>
+                        <td ><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modaledit{{promotion[5]}}">แก้ไข</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <div id="modaledit{{promotion[5]}}" class="modal fade" role="dialog"><!-- เนื้อหาหนังสือ -->
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">อัพเดทข้อมูลหนังสือ</h4>
+                    </div>
+                    <div class="modal-body" id="form_edit_{{promotion[5]}}">
+                      <form>
+                        <label>ชื่อหนังสือที่เลือก</label>
+                        <input value = {{promotion[0]}}>
+                        <label>รูปเเบบการเลือกกลุ่ม</label>
+                        <input value = {{promotion[1]}}>
+                        <label>วันเริ่มต้นโปรโมชัน</label>
+                        <input type = 'date' value = {{promotion[2]}}>
+                        <label>วันสิ้นสุดโปรโมชัน</label>
+                        <input type = 'date' value = {{promotion[3]}}>
+                        <label>จำนวนที่เปอร์เซ็นที่ลด</label>
+                        <input value = {{promotion[4]}}>
+                      </form>
+                      <button id = "submit_edit_{{promotion[5]}}">ยืนยัน</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ชื่อหนังสือที่ร่วมรายการ</th>
+                        <th>ราคาเดิม</th>
+                        <th>ราคาหลังลด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for book in promotion[6] %}
+                    <tr>
+                        <td>{{book[0]}}</td>
+                        <td>{{book[1]}}</td>
+                        <td>{{book[2]}}</td>
+                        <td><button id = "delete_book_{{promotion[5]}}_{{book[3]}}">ลบ</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="" data-toggle="modal" data-target="#addbook{{promotion[5]}}">เพิ่มหนังสือในโปรโมชัน</a>
+            <a href="/delete_promotion/{{promotion[5]}}" style="color: red;">ลบโปรโมชัน</a>
+            <div id="addbook{{promotion[5]}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">อัพเดทข้อมูลหนังสือ</h4>
+                    </div>
+                    <div class="modal-body" id="form_addbook_{{promotion[5]}}">
+                      <form>
+                        <label>รหัสหนังสือ</label>
+                        <input>
+                      </form>
+                      <button id = "addbook_{{promotion[5]}}">ยืนยัน</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <br>
+            <hr>
+            {% endfor %}
+        </div>
+        
+        <br>
+    </div>
+
+    
+
+    <script>
+        document.querySelectorAll('[id^="submit_edit_"]').forEach(function(button){
+            button.addEventListener('click', function(){
+                var id = this.id.split('_')[2];
+                var formId = "#form_edit_" + id;
+                var selectedBook = document.querySelector(formId + " input:nth-of-type(1)").value;
+                var groupSelection = document.querySelector(formId + " input:nth-of-type(2)").value;
+                var startDate = document.querySelector(formId + " input:nth-of-type(3)").value;
+                var endDate = document.querySelector(formId + " input:nth-of-type(4)").value;
+                var discountPercentage = document.querySelector(formId + " input:nth-of-type(5)").value;
+                
+                var data = [{
+                    book: selectedBook,
+                    format: groupSelection,
+                    start: startDate,
+                    end: endDate,
+                    sale: discountPercentage,
+                    id: id
+                }];
+                console.log(data);
+                fetch('/edit_promotion',{
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    console.log('Success', data)
+                    alert('Data sent successfully')
+                })
+                .catch((error) => {
+                    console.error('Error',error)
+                })
+            })
+        })
+        document.querySelectorAll('[id^="addbook_"]').forEach(function(button){
+            button.addEventListener('click', function(){
+                var id = this.id.split('_')[1]
+                var formId = "#form_addbook_"+id;
+                var book_id = document.querySelector(formId+" input:nth-of-type(1)").value
+                var data = [{
+                    book_id : book_id,
+                    id : id
+                }]
+                console.log(data)
+                fetch('/addbook_promotion',{
+                    method: 'POST',
+                    headers:{
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data =>{
+                    console.log('Success',data)
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error('Error',error)
+                })
+            })
+        })
+        document.querySelectorAll('[id^="delete_book_"]').forEach(function(button){
+            button.addEventListener('click', function(){
+                var promotion_id = this.id.split('_')[2]
+                var book_id = this.id.split('_')[3]
+                var data = [{
+                    promotion_id : promotion_id,
+                    book_id : book_id
+                }]
+                fetch('/delete_book_promotion',{
+                    method: 'POST',
+                    headers:{
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data =>{
+                    console.log('Success',data)
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error('Error',error)
+                })
+            })
+        })
+
+    </script>
+</body>
+
+
+</html>

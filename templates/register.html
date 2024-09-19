@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="UTF-8">
+<title>สมัครสมาชิก</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='Reglog.css') }}">
+</head>
+<body>
+    <section class="container">
+        <div class="login-container">
+            <div class="form-container">
+              
+              
+                {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul style="background-color: rgb(255, 155, 155); padding: 20px; list-style-type: none;">
+          {% for category, message in messages %}
+            <li class="{{ category }}" >{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+                <form action="{{ url_for('register') }}" method="post">
+                    <div class="form-group">
+                      <label for="fname">อีเมล</label>
+                      <input type="text" class="form-control" value = "{{email}}" name="email" placeholder="อีเมล@gmail.com">
+                    </div>
+                    <div class="form-group">
+                      <label for="fname">รหัสผ่าน</label>
+                      <input type="password" class="form-control" value = "{{password}}" name="password"placeholder="รหัสผ่าน12345">
+                    </div>
+                    <div class="form-group">
+                      <label for="fname">ชื่อ-นามสกุล</label>
+                      <input type="text" class="form-control" value = "{{fullname}}" name="fullname"placeholder="ชื่อ นามสกุล">
+                    </div>
+                    <div class="form-group">
+                      <label for="gender">เพศ</label>
+                      <select name="gender" id="gender">
+                        <option value="">เลือกเพศ</option>
+                        <option value="ชาย" {% if gender == "ชาย" %}selected{% endif %}>ชาย</option>
+                        <option value="หญิง" {% if gender == "หญิง" %}selected{% endif %}>หญิง</option>
+                        <option value="อื่นๆ" {% if gender == "อื่นๆ" %}selected{% endif %}>อื่นๆ</option>
+                      </select>
+                    </div>
+                    <div class="store">
+                      <label for="fname">วันเกิด</label>
+                      <input type="date" class="form-control" value = "{{birthday}}" name="birthday">
+                    </div>
+                    <div class="form-group">
+                      <label for="fname">ที่อยู่</label>
+                      <input type="text" class="form-control" value = "{{address}}" name="address"placeholder="625/256 กรุงเทพ 10180">
+                    </div>
+                    <div class="store"> 
+                      <label for="fname">เบอร์โทรศัพท์</label>
+                      <input type="text" class="form-control" value = "{{tel_no}}"  name="tel_no" placeholder="0899999999">
+                    </div>
+                    <button type="submit" class="pull-right btn btn-primary">สมัครสมาชิก</button>
+                    <a class="btn" href="/">กลับหน้าแรก</a>
+                    <a class="btn" href="/login">เข้าสู่ระบบ</a>
+                    
+                  </form>
+
+
+            </div>
+        </div>
+        <div class="theme-btn-container"></div>
+    </section>
+</body>
+</html>

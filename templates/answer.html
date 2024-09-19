@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>หนังสือแนะนำ</title>
+</head>
+  <body>
+    <div class = "top">
+      <div class = "upper">
+        <div class = "icn">
+          <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+          <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+          <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <div id = "user_info">
+          <a href="/cart" id = 'cart'> <img src="{{ url_for('static',filename='image/Shopping-Cart-icon.png') }}"></a>
+          <div class = "login_user">
+            {%if data[0][0] != 0%}
+            <div id = 'username' value = '{{data[0][3]}}'>{{data[0][3]}}</div>
+            <a href="/logout">ออกจากระบบ</a>
+            {%else%}
+            <a href="/login">เข้าสู่ระบบ</a>
+            <a href="/register">สมัครสมาชิก</a>
+            {%endif%}
+          </div>
+        </div>
+      </div>
+      <header>
+        <nav class = "menu">
+          <ul>
+              <li><a href="/" disabled>หน้าแรก</a></li>
+              <li><a href="/support_decision">ระบบสนับสนุนการตัดสินใจการซื้อหนังสือ</a></li>
+                {%if data[0][0] == 1 %}
+                <li><a href="/status">สถานะ</a></li><li><a href="./userinfo">ข้อมูลรหัส</a></li>
+                <li><a href="/purchase_data" >ข้อมูลการสั่งซื้อ</a></li>
+                <li><a href="/bookdata" >ข้อมูลหนังสือ</a></li>
+                {%elif data[0][0] >1%}
+                <li><a href="/status_data">สถานะการสั่งซื้อ</a></li>
+                <li><a href="/purchase_data">ประวัติการสั่งซื้อ</a></li>
+                <li><a href="./userinfo">ข้อมูลผู้ใช้</a></li>
+                {%endif%}
+            </ul>
+          </nav>
+        <form id = "searchform" action="{{ url_for('searchbook') }}" method="post">
+          <input type="text" id="search-input" name = "searchinput" placeholder="ค้นหาชื่อหนังสือ">
+          
+          <div id="filter-container">
+          
+            <select id="filter" name = 'fillter'>
+            <option id ="option"value="">หมวดหมู่</option>
+            <option id="life" value="ความรู้รอบตัว">ความรู้รอบตัว</option>
+            <option value="บริหาร / การเงิน / การตลาด">บริหาร / การเงิน / การตลาด</option>
+            <option value="ท่องเที่ยว">ท่องเที่ยว</option>
+            <option value="งานอดิเรก / งานฝีมือ">งานอดิเรก / งานฝีมือ</option>
+            <option value="สุขภาพ / อาหาร / ความงาม">สุขภาพ / อาหาร / ความงาม</option>
+            <option value="เทคโนโลยี / คอมพิวเตอร์">เทคโนโลยี / คอมพิวเตอร์</option>
+            <option value="หนังสือเด็ก">หนังสือเด็ก</option>
+            <option value="ศิลปะ / ดนตรี">ศิลปะ / ดนตรี</option>
+            <option value="พืช / การเกษตร">พืช / การเกษตร</option>
+            <option value="สารคดี / ประวัติศาสตร์ / ชีวประวัติ">สารคดี / ประวัติศาสตร์ / ชีวประวัติ</option>
+            <option value="ครอบครัว แม่และเด็ก">ครอบครัว แม่และเด็ก</option>
+            <option value="ปรัชญา / ศาสนา">ปรัชญา / ศาสนา</option>
+            <option value="โหราศาสตร์ / ความเชื่อ">โหราศาสตร์ / ความเชื่อ</option>
+            <option value="กฏหมาย / การเมือง">กฏหมาย / การเมือง</option>
+            <option value="จิตวิทยา / พัฒนาตนเอง">จิตวิทยา / พัฒนาตนเอง</option>
+            <option value="นิตยสาร">นิตยสาร</option>
+            <option value="หนังสือภาษาต่างประเทศ">หนังสือภาษาต่างประเทศ</option>
+            <option value="หนังสือการ์ตูน มังงะ">หนังสือการ์ตูน มังงะ</option>
+            <option value="หนังสือนิยาย / วรรณกรรม">หนังสือนิยาย / วรรณกรรม	</option>
+            <option value="วิชาการ / ความรู้ทั่วไป">วิชาการ / ความรู้ทั่วไป</option>
+            </select>
+            <div><button id="search-button" onclick="searchsubmit()">ค้นหา</button></div>
+          </div>
+        </form>
+      </header>
+    </div>
+    
+    <div class="dark-overlay" id = "overlay"></div>
+  
+    <div class = "main_content">
+      
+          <div class = "best_sell">
+            <h1 style="text-align: center;">หนังสือที่เหมาะสมกับคุณ </label></h1>
+            <div  id="most_buy_container">
+              {% for index in data[2]%}
+              <tbody>
+                <div id="book_des">
+                  <tr>
+                    <td><a href="" data-toggle="modal" data-target="#modaledit{{index[0]}}"><img src = "{{index[8]}}" ></a></td>
+                    <br>
+                    <div>
+                      {%if index[9] != index[10]%}
+                      <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{index[0]}}" style=" background-color: rgb(0, 55, 255);">{{index[9]}} บาท</a><br>
+                      {%else%}
+                      <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{index[0]}}">{{index[9]}} บาท</a><br>
+                      {%endif%}
+                    </div>
+                      </td>
+                      <br>
+                    </tr>
+                  </div>
+                </tbody>
+                <div id="modaledit{{index[0]}}" class="modal fade" role="dialog"><!-- เนื้อหาหนังสือ -->
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">ข้อมูลหนังสือ</h4>
+                      </div>
+                      <div class="modal-body" id = "form_addcart_{{index[0]}}">
+                        <form>
+                          <img src = "{{index[8]}}" style="height: 100px;">
+                          <div class="form-group">
+                            <label>Book Name</label>
+                            <p>{{index[1]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Publisher</label>
+                            <p>{{index[2]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Type</label>
+                            <p>{{index[3]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Category</label>
+                            <p>{{index[4]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Author</label>
+                            <p>{{index[5]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Description</label>
+                            <p>{{index[6]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Store</label>
+                            <p>{{index[7]}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Price</label>
+                            <p>{%if index[9] != index[10]%}
+                              <del>{{index[10]}}<br></del>
+                              {%endif%}{{index[9]}}</p>
+                          </div>
+                          <div class="form-group">
+                            {%if index[7] == 0 %}
+                            <p>ไม่มีสินค้าในปัจจุบัน</p>
+                            {%else%}
+                            <input type="number" class="form-control" name="wanted" value="1"min="1" max="{{index[7]}}">
+                            {%endif%}
+                          </div>
+                          <input style="display: none;" value = "mainpage" name = "url"></input>
+                        </form>
+                        {% if data[0][0] ==0 %}
+                        <button class="btn btn-primary" id = "addcart_{{index[0]}}" disabled>หยิบใส่ตระกร้า</button>
+                        {% else %}
+                        <button class="btn btn-primary" id = "addcart_{{index[0]}}" >หยิบใส่ตระกร้า</button>
+                        {% endif %}
+                        <div class="form-group">
+                          <label>ขอขอบคุณรูปภาพหนังสือจาก {{index[2]}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+            <nav id="page-label" aria-label="Page navigation">
+              <ul class="pagination">
+                {%if total_pages > 1%}
+                  {% if page > 1 %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('predict', page=page-1) }}">ก่อนหน้า</a></li>
+                  {% endif %}
+                  {% for p in range(1, total_pages + 1) %}
+                      <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('predict', page=p) }}">{{ p }}</a></li>
+                  {% endfor %}
+                  {% if page < total_pages %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('predict', page=page+1) }}">ถัดไป</a></li>
+                  {% endif %}
+                {%endif%}
+              </ul>
+          </nav>
+          </div>
+
+
+      <h1 style="text-align: center;">หนังสือขายดีที่เเนะนำ</h1>
+      <div  id="most_buy_container">
+        {% for index in data[3]%}
+        <tbody>
+          <div id="book_des">
+            <tr>
+              <td style="width: 10px;"><a href="" data-toggle="modal" data-target="#modaledit{{index[0]}}"><img src = "{{index[8]}}"></a></td>
+              <br>
+              <div>
+                {%if index[9] != index[10]%}
+                <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{index[0]}}" style=" background-color: rgb(0, 55, 255);">{{index[9]}} บาท</a><br>
+                {%else%}
+                <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{index[0]}}">{{index[9]}} บาท</a><br>
+                {%endif%}
+                </div>
+                </td>
+                <br>
+              </tr>
+            </div>
+          </tbody>
+          <div id="modaledit{{index[0]}}" class="modal fade" role="dialog"><!-- เนื้อหาหนังสือ -->
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">ข้อมูลหนังสือ</h4>
+                </div>
+                <div class="modal-body" id = "form_addcart_{{index[0]}}">
+                  <form>
+                    <img src = "{{index[8]}}" style="height: 100px;">
+                    <div class="form-group">
+                      <label>Book Name</label>
+                      <p>{{index[1]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Publisher</label>
+                      <p>{{index[2]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Type</label>
+                      <p>{{index[3]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Category</label>
+                      <p>{{index[4]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Author</label>
+                      <p>{{index[5]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Description</label>
+                      <p>{{index[6]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Store</label>
+                      <p>{{index[7]}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Price</label>
+                      <p>{%if index[9] != index[10]%}
+                        <del>{{index[10]}}<br></del>
+                        {%endif%}{{index[9]}}</p>
+                    </div>
+                    <div class="form-group">
+                      {%if index[7] == 0 %}
+                      <p>ไม่มีสินค้าในปัจจุบัน</p>
+                      {%else%}
+                      <input type="number" class="form-control" name="wanted" value="1"min="1" max="{{index[7]}}">
+                      {%endif%}
+                    </div>
+                    <input style="display: none;" value = "mainpage" name = "url"></input>
+                  </form>
+                  {% if data[0][0] ==0 %}
+                  <button class="btn btn-primary" id = "addcart_{{index[0]}}" disabled>Add to Cart</button>
+                  {% else %}
+                  <button class="btn btn-primary" id = "addcart_{{index[0]}}" >Add to Cart</button>
+                  {% endif %}
+                  <div class="form-group">
+                    <label>ขอขอบคุณรูปภาพหนังสือจาก {{index[2]}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+  </body>
+    <script>
+      console.log(document.getElementById('username').innerHTML)
+      uesr_name = document.getElementById('username').innerHTML.split(" ")
+      document.getElementById('username').innerHTML = uesr_name[0]
+
+      flask_data = '{{data}}'
+      flask_data = flask_data.replaceAll("&#39;","").slice(1, -1)
+      pre_array = flask_data.split('(')
+      var i,data,x
+      array = []
+      array2 = []
+      for (i=1 ; i <pre_array.length ;i++){
+        data = pre_array[i].split(')')
+        array.push(data[0])
+      }
+      array = array[0].split(', ')
+      console.log(array[0])
+      if(array[0] == 0){
+        console.log('not login')
+        x = "<a href=\"/login\" class=\"btn btn-primary\">เข้าสู่ระบบ</a>"
+        document.getElementById("head").innerHTML = x
+      }
+      else if(array[0] == 1){
+        console.log('admin')
+        x = "<a href=\"/cart\" class=\"btn btn-primary\">Cart</a>\
+      <a href=\"/logout\" class=\"btn btn-primary\">ออกจากระบบ</a>"
+        document.getElementById("head").innerHTML = x
+        console.log('custommer')
+        console.log()
+        x = "<a href=\"/cart\" class=\"btn btn-primary\">Cart</a>\
+      <a href=\"/logout\" class=\"btn btn-primary\">ออกจากระบบ</a>"
+        document.getElementById("head").innerHTML = x
+      }
+
+      document.getElementById('filter').addEventListener('focus', ()=>{
+        document.getElementById('overlay').style.display = 'block';
+      })
+      document.getElementById('filter').addEventListener('blur', () => {
+        document.getElementById('overlay').style.display = 'none';
+      });
+      var url
+      function searchsubmit(){
+        document.getElementById('searchform').submit();
+      }
+
+      
+      document.querySelectorAll('[id^="addcart_"]').forEach(function(button){
+        button.addEventListener('click', function(event){
+          event.preventDefault(); // ป้องกันการดำเนินการเริ่มต้น
+          event.stopPropagation();
+          var book_id = this.id.split('_')[1]
+          var formId = "#form_addcart_" + book_id
+          var amount = document.querySelector(formId + " input:nth-of-type(1)").value;
+          var data = [{
+            book_id : book_id,
+            amount : amount
+          }]
+          fetch('/addcart',{
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          }).then(response => response.json())
+          .then(data => {
+            console.log('Success', data)
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error('Error',error)
+          })
+        }, { once: true })
+      })
+    </script>
+</body>
+
+</html>

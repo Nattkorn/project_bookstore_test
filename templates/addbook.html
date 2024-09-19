@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <h2>บันทึกข้อมูล</h2>
+          <form action="{{ url_for('insert') }}" method="post">
+           <div class="form-group">
+             <label for="fname">รหัสหนังสือ</label>
+             <input type="number" class="form-control"  name="book_id">
+           </div>
+           <div class="form-group">
+             <label for="fname">ชื่อหนังสือ</label>
+             <input type="text" class="form-control"  name="book_name">
+           </div>
+           <div class="form-group">
+             <label for="fname">สำนักพิมพ์</label>
+             <input type="text" class="form-control"  name="publisher">
+           </div>
+           <div class="form-group">
+             <label for="fname">ประเภทกลุ่มหนังสือ</label>
+             <input type="text" class="form-control"  name="type">
+           </div>
+           <div class="form-group">
+             <label for="fname">ประเภท</label>
+             <input type="text" class="form-control"  name="book_type">
+           </div>
+           <div class="form-group">
+             <label for="fname">หมวดหมู่</label>
+             <input type="text" class="form-control"  name="category">
+           </div>
+           <div class="form-group">
+             <label for="fname">ผู้เเต่ง</label>
+             <input type="text" class="form-control"  name="author">
+           </div>
+           <div class="store">
+             <label for="fname">คำบรรยาย</label>
+             <input type="text" class="form-control"  name="description">
+           </div>
+           <div class="store">
+             <label for="fname">จำนวน(เล่ม)</label>
+             <input type="number" class="form-control"  name="store">
+           </div>
+           <div class="store">
+             <label for="fname">รูปภาพ(เป็นลิ้ง)</label>
+             <input type="text" class="form-control"  name="image_url">
+           </div>
+           <div class="store">
+             <label for="fname">ราคา</label>
+             <input type="number" class="form-control"  name="price">
+           </div>
+           <a class="btn btn-success" href="/">กลับหน้าแรก</a>
+           <button type="submit" class="pull-right btn btn-primary">บันทึก</button>
+          </form>
+   </div>
+</body>
+</html>

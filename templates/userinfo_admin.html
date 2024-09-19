@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลผู้ใช้งาน</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='userinfo_admin.css') }}">
+    
+</head>
+<body>
+    <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+    </div>
+    <header>
+        <h1>ข้อมูลผู้ใช้งาน</h1>
+    </header>
+   
+    </div>
+    
+    
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul style="background-color: rgb(255, 155, 155); padding: 20px; list-style-type: none;">
+            <li>การเเก้ไขข้อมูลของท่านไม่สำเร็จ</li>
+            {% for category, message in messages %}
+              <li class="{{ category }}" >{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+        <table>
+            <thead>
+                <tr>
+                    <th>รหัสประจำตัว</th>
+                    <th>อีเมล</th>
+                    <th>รหัสผ่าน</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>เพศ</th>
+                    <th>วันเกิด</th>
+                    <th>ที่อยู่</th>
+                    <th>เบอร์โทรศัพท์</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in data %}
+                <tr>
+                    <td>{{user[0]}}</td>
+                    <td>{{user[1]}}</td>
+                    <td>{{user[2]}}</td>
+                    <td>{{user[3]}}</td>
+                    <td>{{user[4]}}</td>
+                    <td>{{user[5]}}</td>
+                    <td>{{user[6]}}</td>
+                    <td>{{user[7]}}</td>
+                    <td><a href=""id="editbtn" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{user[0]}}">เเก้ไข</a></td>
+                    <td><a href="/deleteuser/{{user[0]}}" class="btn btn-danger btn-xs">ลบ</a></td>
+                </tr>
+                <div id="modaledit{{user[0]}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                        </div>
+                        <div class="modal-body">
+                          
+                <form action = "/updateuser" method="POST" >
+                  <div class="form-group">
+                    ไอดี
+                    <input type="text" class="form-control" name="user_id" value="{{user[0]}}">
+                    อีเมล
+                    <input type="text" name = 'email' value="{{user[1]}}"/>
+                    รหัสผ่าน
+                    <input type="text" name = 'password' value="{{user[2]}}"/>
+                    ชื่อ-นามสกุล
+                    <input type="text" name = 'name' value="{{user[3]}}"/>
+                    เพศ
+                    <select name="gender" id="gender">
+                      <option value="">เลือกเพศ</option>
+                      <option value="ชาย" {% if gender == "ชาย" %}selected{% endif %}>ชาย</option>
+                      <option value="หญิง" {% if gender == "หญิง" %}selected{% endif %}>หญิง</option>
+                      <option value="อื่นๆ" {% if gender == "อื่นๆ" %}selected{% endif %}>อื่นๆ</option>
+                    </select>
+                    วันเกิด
+                    <input type="date" name = 'birthday' value="{{user[5]}}"/>
+                    ที่อยู่
+                    <input type="text" name = 'address' value="{{user[6]}}"/>
+                    เบอร์มือถือ
+                    <input type="number" name = 'tel_no' value="{{user[7]}}"/>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">อัพเดท</button>
+                    </div>
+                </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                {% endfor %}
+            </tbody>
+        </table>  
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ยืนยันการชำระเงิน</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='comfirmbuy.css') }}">
+</head>
+<body>
+  <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <div id = "pagename">
+            <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+        </div>
+    </div>
+    <header>
+        <h1>ยืนยันการชำระเงิน</h1>
+    </header>
+  <div class="main_content">
+  <form action="/purchase" method="post" enctype="multipart/form-data">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul style="background-color: rgb(255, 155, 155); padding: 20px; list-style-type: none;">
+            <li>การยืนยันการชำระเงินของท่านไม่สำเร็จ</li>
+            {% for category, message in messages %}
+              <li class="{{ category }}" >{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    <p>รหัสการสั่งซื้อ {{data[2]}}</p><br>
+    <p>ชื่อ</p>
+    <input type="text" name = "name" value="{{data[0][1]}}">
+  <p>เบอร์โทร</p>
+    <input type="number" name = "tel_no" value="{{data[0][3]}}">
+  <p>ที่อยู่</p>
+    <input type="text" name = "address" value="{{data[0][2]}}">
+  <p>ใบเสร็จยืนยันการชำระเงิน</p>
+    <input type="file" name="image" accept="image/*">
+    <input type="text" name="pur_id" value="{{data[2]}}" style="display: none;">
+    <p>ราคารวม {{data[1][0][0]}} บาท</p>
+    <button type="submit">ยืนยันการชำระเงิน</button>
+</form>
+</div>  
+</body>
+</html>

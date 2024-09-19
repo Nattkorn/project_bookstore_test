@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถานะการสั่งซื้อ</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
+    
+</head>
+<body>
+    <div class = "top">
+    <div class = "upper">
+        <div class = "icn">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/sdas-removebg-preview.png') }}" alt="รูปภาพ">
+        <img src="{{ url_for('static', filename='image/cc-removebg-preview.png') }}" alt="รูปภาพ">
+        </div>
+        <a href="/" id = 'cart'> <img src="{{ url_for('static',filename='image/25694.png') }}"></a>
+    </div>
+    <header>
+        <h1>สถานะการสั่งซื้อ</h1>
+    </header>
+  
+    </div>
+    
+    <div class = "main_content">
+        <div style="margin: 10px; max-width: 90%;">
+            {% for order in data %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>รหัสการซื้อ</th>
+                        <th class="imagebook">รูปภาพ</th>
+                        <th>ชื่อ</th>
+                        <th>จำนวน</th>
+                        <th>ราคา</th>
+                        <th>สถานะ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div>
+                        {% for book in order[0] %}
+                        <tr>
+                            <td>{{book[0]}}</td>
+                            <td><img src = "{{book[6]}}" style="height: 100px;"></td>
+                            <td>{{book[5]}}</td>
+                            <td>{{book[2]}}</td>
+                            <td>{{book[7]}}</td>
+                            {% if book[3] == 0 %}
+                            <td>ยังไม่ได้ชำระเงิน</td>
+                            {% elif book[3] == 3 %}
+                            <td>ทำรายการเสร็จสิ้น</td>
+                            {% else %}
+                            <td>รอการตรวจสอบ</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </div>
+                </tbody>
+            </table>
+            <p>ราคารวม {{order[1]}} บาท</p>
+            {% if order[0][0][3] == 0 %}
+            <a href="purchase/{{order[0][0][8]}}">ชำระเงิน</a>
+            <a id = "delete_purchase_{{order[0][0][8]}}" style="color: red;">ลบรายการสั่งซื้อ</a>
+            {%else%}
+            <a href="/update_purchase" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{order[0][0][8]}}">เเก้ไขข้อมูลการชำระเงิน</a>
+            <div id="modaledit{{order[0][0][8]}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="/update_purchase" method="POST">
+                            <label>Payment Proof</label>
+                            <img src="/image/{{order[0][0][8]}}" alt="Payment Proof" class="img-responsive" />
+                          <label>Purchase ID</label>
+                          <input type="text" class="form-control" name="store" value="{{order[0][0][8]}}">
+                          <label>Name</label>
+                          <input type="text" class="form-control" name="store" value="{{order[2][1]}}">
+                          <label>Address</label>
+                          <input type="text" class="form-control" name="store" value="{{order[2][2]}}">
+                          <label>Tel_no</label>
+                          <input type="text" class="form-control" name="store" value="{{order[2][3]}}">
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+                      <a href="purchase/{{order[0][0][8]}}">เเก้ไขข้อมูลการชำระเงิน</a><br><hr>
+                    </div>  
+                </div>
+            </div>
+        </div>
+          
+            {% endif %}
+            <br><hr>
+
+            {% endfor %}
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            {%if total_pages > 1%}
+              {% if page > 1 %}
+                  <li class="page-item"><a class="page-link" href="{{ url_for('status_data', page=page-1) }}">ก่อนหน้า</a></li>
+              {% endif %}
+              {% for p in range(1, total_pages + 1) %}
+                  <li class="page-item {% if p == page %}active{% endif %}">
+                      <a class="page-link" href="{{ url_for('status_data', page=p) }}">{{ p }}</a>
+                  </li>
+              {% endfor %}
+              {% if page < total_pages %}
+                  <li class="page-item"><a class="page-link" href="{{ url_for('status_data', page=page+1) }}">ถัดไป</a></li>
+              {% endif %}
+            {%endif%}
+          </ul>
+      </nav>
+    </div>
+
+
+
+
+    <footer>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('[id^="delete_purchase_"]').forEach(function(anchor){
+        anchor.addEventListener('click', function(event){
+          event.preventDefault(); // ป้องกันการดำเนินการเริ่มต้น
+          event.stopPropagation();
+          var pur_id = this.id.split('_')[2]
+          console.log(pur_id)
+          var data = [{
+            pur_id :pur_id
+          }]
+          fetch('/delete_purchase',{
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          }).then(response => response.json())
+          .then(data => {
+            console.log('Success', data)
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error('Error',error)
+          })
+        }, { once: true })
+      })
+    </script>
+</body>
+</html>
